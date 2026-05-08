@@ -1,0 +1,48 @@
+@startuml
+
+package "View" {
+    interface IGameView {
+        +displayMessage(msg: string)
+        +renderBoard(model: GameModel)
+    }
+}
+
+package "Controller" {
+    class GameController {
+        -model: GameModel
+        -view: IGameView
+        +run()
+        +handleInput()
+    }
+}
+
+package "Model" {
+    class GameModel {
+        -currentState: IGameState
+        -players: List<Player>
+        +update(input: string)
+        +changeState(newState: IGameState)
+    }
+
+    interface IGameState {
+        +onEnter()
+        +handleInput(context: GameModel, input: string)
+    }
+
+    class Player {
+        -strategy: IStrategy
+        +makeDecision()
+    }
+
+    interface IStrategy {
+        +calculateMove(data: GameData)
+    }
+}
+
+GameController -> GameModel : update
+GameController -> IGameView : uses input/output
+GameModel *-- Player : manage
+Player *-- IStrategy : uses
+IGameState ..> GameModel : change state to
+
+@enduml
