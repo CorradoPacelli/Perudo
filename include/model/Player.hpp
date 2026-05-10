@@ -1,0 +1,49 @@
+#pragma once
+
+#include <string>
+#include <memory>
+
+#include "Die.hpp"
+#include "IStrategy.hpp"
+
+class Player {
+private:
+    std::string name;
+    std::vector<Die> hand;
+    std::unique_ptr<IStrategy> strategy;
+    bool isAlive;
+
+public:
+
+    ~Player() = default;
+    
+    /**
+     * @brief Standard real player constructor
+     * @param name Name of the player
+     * In this variant of the game, the default number of dice is 6. 
+     */
+    Player(const std::string name);
+
+    /**
+     * @brief Special real player constructor
+     * @param name Name of the player
+     * @param numberOfDice Number of dice for this player
+     */
+    Player(std::string name, int numberOfDice);
+
+    /**
+     * @brief Standard non-real player
+     * @param name Name of the player
+     * @param stategy The strategy used by the artifical player
+     */
+    Player(std::string name, IStrategy stategy);
+
+    void rollAllDice();
+    void loseDie();
+    void loseDice(int numberToLose);
+    const std::vector<Die>& getHand() const;
+    int getDiceCount() const;
+    const std::string getName() const;
+    bool checkAlive() const;
+    bool isAI() const;
+};
