@@ -13,7 +13,7 @@ Bid::Bid(int quantity, short int face) : quantity(quantity), face(face) {
     }
 }
 
-int Bid::getQuanmtity() const {
+int Bid::getQuantity() const {
     return quantity;
 }
 

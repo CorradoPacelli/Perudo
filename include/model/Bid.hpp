@@ -9,7 +9,7 @@ private:
 
 public:
     Bid(int quantity, short int face);
-    int getQuanmtity() const;
+    int getQuantity() const;
     int getFace() const;
     bool isValidAfter(const Bid& other) const;
 };

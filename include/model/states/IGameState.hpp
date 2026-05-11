@@ -3,15 +3,18 @@
 #include <string>
 #include <memory>
 
-class GameEngine;
+#include "IAction.hpp"
+
+class GameModel;
+class IGameView;
 
 class IGameState {
 public:
     virtual ~IGameState() = default;
 
-    virtual void onEnter() = 0;
+    virtual void onEnter(GameModel& context) = 0;
 
-    virtual std::unique_ptr<IGameState> handleInput(GameEngine& context, const std::string& input) = 0;
+    virtual void handleAction(GameModel& context, const IAction& action) = 0;
 
-    virtual void render() const = 0;
+    virtual void render(const GameModel& context, IGameView& view) const = 0;
 };

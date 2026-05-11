@@ -1,13 +1,13 @@
 #include "Player.hpp"
 
-Player::Player(std::string name) : name(name), isAlive(true), strategy(nullptr) {
+Player::Player(std::string name) : name(name), alive(true), strategy(nullptr) {
     hand.reserve(6);
     for (int i = 0; i < 6; ++i){
         hand.emplace_back();
     }
 }
 
-Player::Player(std::string name, int numberOfDice) : name(name), isAlive(true), strategy(nullptr) {
+Player::Player(std::string name, int numberOfDice) : name(name), alive(true), strategy(nullptr) {
     hand.reserve(numberOfDice);
     for (int i = 0; i < numberOfDice; ++i){
         hand.emplace_back();
@@ -18,8 +18,8 @@ const std::string Player::getName() const {
     return name; 
 }
 
-bool Player::checkAlive() const { 
-    return isAlive; 
+bool Player::isAlive() const { 
+    return alive; 
 }
 
 bool Player::isAI() const { 
@@ -37,7 +37,7 @@ void Player::loseDie(){
         hand.pop_back();
     }
     if(hand.empty()){
-        isAlive = false;
+        alive = false;
     }
 }
 

@@ -14,7 +14,7 @@ private:
     std::vector<Die> hand;
     std::vector<Bid> bids;
     std::unique_ptr<IStrategy> strategy;
-    bool isAlive;
+    bool alive;
 
 public:
 
@@ -27,8 +27,8 @@ public:
      */
     Player(const std::string name);
 
-    /**
-     * @brief Special real player constructor
+    /**l
+     * @brief Special real player constructorl
      * @param name Name of the player
      * @param numberOfDice Number of dice for this player
      */
@@ -42,7 +42,7 @@ public:
     Player(std::string name, IStrategy stategy);
 
     const std::string getName() const;
-    bool checkAlive() const;
+    bool isAlive() const;
     bool isAI() const;
 
     void rollAllDice();
@@ -55,4 +55,7 @@ public:
     std::optional<Bid> getLastBid() const;
     void clearHistory();
     const std::vector<Bid>& getFullHistory() const;
+
+    bool operator==(const Player&) const = default;
+    bool operator!=(const Player& other) const = default;
 };
