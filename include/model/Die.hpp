@@ -4,7 +4,7 @@
 
 class Die {
 private:
-    short int value;
+    short int face;
     static std::mt19937 randomGenerator;
 
 public:
@@ -12,5 +12,5 @@ public:
     ~Die() = default;
 
     static short int roll();
-    short int getValue() const;
+    short int getFace() const;
 };

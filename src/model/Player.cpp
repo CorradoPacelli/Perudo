@@ -14,6 +14,18 @@ Player::Player(std::string name, int numberOfDice) : name(name), isAlive(true), 
     }
 }
 
+const std::string Player::getName() const { 
+    return name; 
+}
+
+bool Player::checkAlive() const { 
+    return isAlive; 
+}
+
+bool Player::isAI() const { 
+    return strategy != nullptr; 
+}
+
 void Player::rollAllDice() {
     for (auto& die : hand){
         die.roll();
@@ -43,14 +55,19 @@ int Player::getDiceCount() const {
     return hand.size(); 
 }
 
-const std::string Player::getName() const { 
-    return name; 
+void Player::addBid(const Bid& bid) {
+    bids.push_back(bid);
 }
 
-bool Player::checkAlive() const { 
-    return isAlive; 
+std::optional<Bid> Player::getLastBid() const {
+    if (bids.empty()) return std::nullopt;
+    return bids.back();
 }
 
-bool Player::isAI() const { 
-    return strategy != nullptr; 
+void Player::clearHistory() {
+    bids.clear();
+}
+
+const std::vector<Bid>& Player::getFullHistory() const { 
+    return bids; 
 }

@@ -2,14 +2,17 @@
 
 #include <string>
 #include <memory>
+#include <optional>
 
 #include "Die.hpp"
 #include "IStrategy.hpp"
+#include "Bid.hpp"
 
 class Player {
 private:
     std::string name;
     std::vector<Die> hand;
+    std::vector<Bid> bids;
     std::unique_ptr<IStrategy> strategy;
     bool isAlive;
 
@@ -38,12 +41,18 @@ public:
      */
     Player(std::string name, IStrategy stategy);
 
+    const std::string getName() const;
+    bool checkAlive() const;
+    bool isAI() const;
+
     void rollAllDice();
     void loseDie();
     void loseDice(int numberToLose);
     const std::vector<Die>& getHand() const;
     int getDiceCount() const;
-    const std::string getName() const;
-    bool checkAlive() const;
-    bool isAI() const;
+
+    void addBid(const Bid& bid);
+    std::optional<Bid> getLastBid() const;
+    void clearHistory();
+    const std::vector<Bid>& getFullHistory() const;
 };
