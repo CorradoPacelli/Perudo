@@ -16,10 +16,10 @@ void EndGameState::onEnter(GameModel& context) {
 void EndGameState::handleAction(GameModel& context, const IAction& action) {
     if (action.getType() == ActionType::RESET) {
         //context.resetGame(); TODO: reset Game
-        context.changeState(std::make_unique<RollingState>());
+        requestStateChange(context, std::make_unique<RollingState>());
     } else if (action.getType() == ActionType::EXIT) {
-        // Exit the application
+        context.stopGame();
     } else {
-        // Here we should never accept any other action
+        // TODO: Here we should never accept any other action
     }
 }

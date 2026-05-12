@@ -49,9 +49,9 @@ void ResolutionState::handleAction(GameModel& context, const IAction& action) {
 
     //Decide where to transit
     if (context.isOnlyOnePlayerAlive()){
-        context.changeState(std::make_unique<EndGameState>());
+        requestStateChange(context, std::make_unique<EndGameState>());
     } else {
-        context.changeState(std::make_unique<RollingState>());
+        requestStateChange(context, std::make_unique<RollingState>());
     }
 }
 

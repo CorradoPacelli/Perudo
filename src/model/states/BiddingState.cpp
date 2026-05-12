@@ -8,7 +8,7 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
     {
     case ActionType::DUDO :
     case ActionType::EXACTLY :
-        context.changeState(std::make_unique<ResolutionState>());
+        requestStateChange(context, std::make_unique<ResolutionState>());
         break;
     
     case ActionType::BID :

@@ -17,4 +17,7 @@ public:
     virtual void handleAction(GameModel& context, const IAction& action) = 0;
 
     virtual void render(const GameModel& context, IGameView& view) const = 0;
+    
+protected:
+    void requestStateChange(GameModel& context, std::unique_ptr<IGameState> newState);
 };

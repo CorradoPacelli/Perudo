@@ -10,7 +10,7 @@ void RollingState::onEnter(GameModel& context) {
         }
     }
 
-    context.changeState(std::make_unique<BiddingState>());
+    requestStateChange(context, std::make_unique<BiddingState>());
 }
 
 void RollingState::handleAction(GameModel& context, const IAction& action) {
