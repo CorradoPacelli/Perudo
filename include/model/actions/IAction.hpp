@@ -1,6 +1,6 @@
 #pragma once
 
-enum class ActionType { BID, DUDO, EXACTLY };
+enum class ActionType { BID, DUDO, EXACTLY, EXIT, RESET };
 
 class IAction {
 protected:
@@ -8,6 +8,6 @@ protected:
 
 public:
     virtual ~IAction() = default;
-    IAction();
+    IAction(ActionType type) : type(type) {};
     virtual ActionType getType() const { return type; };
 };

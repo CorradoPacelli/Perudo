@@ -21,7 +21,7 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
         }
         break;
     default:
-        // Uknown state??
+        // Uknown action for this BiddingState??
         break;
     }
 }

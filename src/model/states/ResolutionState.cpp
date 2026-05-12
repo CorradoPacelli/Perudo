@@ -1,6 +1,8 @@
 #include <optional>
 
 #include "ResolutionState.hpp"
+#include "RollingState.hpp"
+#include "EndGameState.hpp"
 #include "GameModel.hpp"
 #include "DudoAction.hpp"
 #include "ExactlyAction.hpp"
@@ -12,23 +14,20 @@ void ResolutionState::handleAction(GameModel& context, const IAction& action) {
 
     int result = checkLastBid(context);
 
-    try {
-        const DudoAction& dudoAction = dynamic_cast<const DudoAction&>(action);
+    switch (action.getType())
+    {
+    case ActionType::DUDO :
 
         if (result >= 0){
             // current player loses
             context.getCurrentPlayer().loseDie();
         } else {
             // past player loses
-            context.getPreviousPlayer().loseDie();
+            context.getPreviousAlivePlayer().loseDie();
         }
+        break;
 
-    } catch (const std::bad_cast& e) {
-        //std::cout << "Cast failed: " << e.what() << std::endl;
-    }
-
-    try {
-        const ExactlyAction& dudoAction = dynamic_cast<const ExactlyAction&>(action);
+    case ActionType::EXACTLY :
 
         if (result == 0){
             // all the other players lose 
@@ -41,22 +40,23 @@ void ResolutionState::handleAction(GameModel& context, const IAction& action) {
             // current player lose 2 dice
             context.getCurrentPlayer().loseDice(2);
         }
-
-    } catch (const std::bad_cast& e) {
-        //std::cout << "Cast failed: " << e.what() << std::endl;
+        break;
+    
+    default:
+        // We should never be here
+        break;
     }
 
-    try {
-        const BidAction& bidAction = dynamic_cast<const BidAction&>(action);
-        return;
-        // We should never be here
-    } catch (const std::bad_cast& e) {
-        //std::cout << "Cast failed: " << e.what() << std::endl;
+    //Decide where to transit
+    if (context.isOnlyOnePlayerAlive()){
+        context.changeState(std::make_unique<EndGameState>());
+    } else {
+        context.changeState(std::make_unique<RollingState>());
     }
 }
 
 int ResolutionState::checkLastBid(GameModel& context) {
-    std::optional<Bid> toBeat = context.getPreviousPlayer().getLastBid();
+    std::optional<Bid> toBeat = context.getPreviousAlivePlayer().getLastBid();
     if (!toBeat) throw; //This should never happen, for now let's throw
     int actualyQuantity = 0;
     for (auto& player : context.getPlayers()) {
