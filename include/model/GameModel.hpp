@@ -17,7 +17,8 @@ public:
     void addPlayer(const Player player);
     void nextPlayer();
     Player& getCurrentPlayer();
-    Player& getPreviousPlayer();
+    Player& getPreviousAlivePlayer();
+    bool isOnlyOnePlayerAlive() const;
     std::vector<Player>& getPlayers();
     std::optional<Bid> getLastBid() const;
 };

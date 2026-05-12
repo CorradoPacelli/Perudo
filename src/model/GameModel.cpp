@@ -27,7 +27,7 @@ Player& GameModel::getCurrentPlayer() {
     return players.at(currentPlayerIndex); 
 }
 
-Player& GameModel::getPreviousPlayer() { 
+Player& GameModel::getPreviousAlivePlayer() { 
     int previousPlayer = currentPlayerIndex;
     do {
         --previousPlayer;
@@ -43,6 +43,18 @@ Player& GameModel::getPreviousPlayer() {
         throw;
     }
     return players.at(previousPlayer);
+}
+
+bool GameModel::isOnlyOnePlayerAlive() const {
+    int nextPlayerIndex = currentPlayerIndex;
+    int numberOfPlayerAlive = 0;
+    do {
+        if (players.at(nextPlayerIndex).isAlive()) ++numberOfPlayerAlive;
+        if (numberOfPlayerAlive > 1) return false;
+        nextPlayerIndex = (nextPlayerIndex + 1) % players.size();
+    } while (nextPlayerIndex != currentPlayerIndex);
+
+    return true;
 }
 
 std::vector<Player>& GameModel::getPlayers() { 
