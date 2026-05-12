@@ -1,4 +1,20 @@
 #include "GameModel.hpp"
+#include "RollingState.hpp"
+
+void GameModel::startGame() {
+    // TODO: check for other things to do when a game start
+    gameOver = false;
+    currentPlayerIndex = 0;
+    changeState(std::make_unique<RollingState>());
+}
+
+bool GameModel::isGameOver() {
+    return gameOver;
+}
+
+void GameModel::stopGame() {
+    gameOver = true;
+}
 
 void GameModel::addPlayer(const Player player) { 
     players.emplace_back(player); 
@@ -63,4 +79,16 @@ std::vector<Player>& GameModel::getPlayers() {
 
 std::optional<Bid> GameModel::getLastBid() const { 
     return players.at(currentPlayerIndex).getLastBid(); 
+}
+
+void GameModel::render(IGameView& view) const {
+    if (currentState) {
+        currentState->render(*this, view);
+    }
+}
+
+void GameModel::handleAction(const IAction& action) {
+    if (currentState) {
+        currentState->handleAction(*this, action);
+    }
 }
