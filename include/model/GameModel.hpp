@@ -30,9 +30,12 @@ public:
     void addPlayer(const Player player);
     void nextPlayer();
     Player& getCurrentPlayer();
+    const Player& getCurrentPlayer() const;
     Player& getPreviousAlivePlayer();
+    const Player& getPreviousAlivePlayer() const;
     bool isOnlyOnePlayerAlive() const;
     std::vector<Player>& getPlayers();
+    const std::vector<Player>& getPlayers() const;
     std::optional<Bid> getLastBid() const;
     
     void render(IGameView& view) const;

@@ -7,6 +7,8 @@
 #include "DudoAction.hpp"
 #include "ExactlyAction.hpp"
 #include "BidAction.hpp"
+#include "Die.hpp"
+#include "IGameView.hpp"
 
 void ResolutionState::handleAction(GameModel& context, const IAction& action) {
     std::optional<Bid> lastBid = context.getLastBid();
@@ -77,4 +79,20 @@ int ResolutionState::checkLastBid(GameModel& context) {
     }
 
     return -1;
+}
+
+void ResolutionState::render(const GameModel& context, IGameView& view) const {
+    std::string msg = "\n--- RESOLUTION PHASE---\n";
+    
+    for (const auto& player : context.getPlayers()) {
+        if (!player.isAlive()) continue;
+        msg += player.getName() + ": ";
+        for (const auto& die : player.getHand()) {
+            msg += std::to_string(die.getFace()) + " ";
+        }
+        msg += "\n";
+    }
+    msg += "\nType again 'dudo' to confirm :)"; //TODO: fix the second round of actions due to that ResolutionState has to accept an action 
+    
+    view.displayMessage(msg);
 }
