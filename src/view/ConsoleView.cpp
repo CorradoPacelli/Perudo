@@ -1,10 +1,19 @@
 #include "ConsoleView.hpp"
+#include "ActionInterpreter.hpp"
 #include <iostream>
 
-std::string ConsoleView::waitForInput() {
-    std::string input;
-    std::getline(std::cin, input);
-    return input;
+std::unique_ptr<IAction> ConsoleView::waitForAction() {
+    while (true) {
+        std::string input;
+        std::getline(std::cin, input);
+        
+        auto action = ActionInterpreter::interpret(input);
+        if (action) {
+            return action;
+        }
+        
+        displayMessage("Command was not recognized. Try again :)");
+    }
 }
 
 void ConsoleView::displayMessage(const std::string& message) {

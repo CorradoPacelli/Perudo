@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "IAction.hpp"
+class IAction;
 
 class ActionInterpreter {
 public:

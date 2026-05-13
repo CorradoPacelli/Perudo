@@ -12,15 +12,7 @@ void GameController::run() {
 
     while (!model.isGameOver()) {
         model.render(view);
-
-        std::string rawInput = view.waitForInput();
-        auto action = ActionInterpreter::interpret(rawInput);
-        while (!action) {
-            view.displayMessage("Command was not recognized. Try again :)");
-
-            std::string rawInput = view.waitForInput();
-            action = ActionInterpreter::interpret(rawInput);
-        }
+        auto action = view.waitForAction();
         model.handleAction(*action);
     }
 }

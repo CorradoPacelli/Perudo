@@ -1,16 +1,19 @@
 #pragma once
 
 #include <string>
+#include <memory>
+
+class IAction;
 
 class IGameView {
 public:
     virtual ~IGameView() = default;
 
     /**
-     * @brief Waits for input from the player/user.
-     * @return A string containing the raw user input.
+     * @brief Waits for the user to perform an action.
+     * @return A unique pointer to the generated action.
      */
-    virtual std::string waitForInput() = 0;
+    virtual std::unique_ptr<IAction> waitForAction() = 0;
 
     /**
      * @brief Displays a message to the player/user.
