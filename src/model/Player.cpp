@@ -1,4 +1,8 @@
 #include "Player.hpp"
+#include "IStrategy.hpp"
+#include "Die.hpp"
+
+Player::~Player() = default;
 
 Player::Player(std::string name) : name(name), alive(true), strategy(nullptr) {
     hand.reserve(6);
@@ -71,3 +75,6 @@ void Player::clearHistory() {
 const std::vector<Bid>& Player::getFullHistory() const { 
     return bids; 
 }
+
+bool Player::operator==(const Player& other) const = default;
+bool Player::operator!=(const Player& other) const = default;

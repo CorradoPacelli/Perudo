@@ -1,5 +1,8 @@
 #include "GameModel.hpp"
 #include "RollingState.hpp"
+#include "IGameState.hpp"
+
+GameModel::~GameModel() = default;
 
 void GameModel::startGame() {
     // TODO: check for other things to do when a game start

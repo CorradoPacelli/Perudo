@@ -1,8 +1,9 @@
 #pragma once
 
-#include "GameModel.hpp"
-#include "IGameView.hpp"
 #include <memory>
+
+class GameModel;
+class IGameView;
 
 class GameController {
 private:

@@ -3,10 +3,9 @@
 #include <string>
 #include <memory>
 
-#include "IAction.hpp"
-
 class GameModel;
 class IGameView;
+class IAction;
 
 class IGameState {
 public:

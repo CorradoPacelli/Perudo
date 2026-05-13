@@ -4,9 +4,10 @@
 #include <memory>
 #include <optional>
 
-#include "Die.hpp"
-#include "IStrategy.hpp"
 #include "Bid.hpp"
+
+class IStrategy;
+class Die;
 
 class Player {
 private:
@@ -18,7 +19,7 @@ private:
 
 public:
 
-    ~Player() = default;
+    ~Player();
     
     /**
      * @brief Standard real player constructor
@@ -37,9 +38,9 @@ public:
     /**
      * @brief Standard non-real player
      * @param name Name of the player
-     * @param stategy The strategy used by the artifical player
+     * @param strategy The strategy used by the artifical player
      */
-    Player(std::string name, IStrategy stategy);
+    Player(std::string name, std::unique_ptr<IStrategy> strategy);
 
     const std::string getName() const;
     bool isAlive() const;
@@ -56,6 +57,6 @@ public:
     void clearHistory();
     const std::vector<Bid>& getFullHistory() const;
 
-    bool operator==(const Player&) const = default;
-    bool operator!=(const Player& other) const = default;
+    bool operator==(const Player& other) const;
+    bool operator!=(const Player& other) const;
 };

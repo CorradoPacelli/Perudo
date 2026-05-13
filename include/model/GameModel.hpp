@@ -4,10 +4,10 @@
 #include <memory>
 
 #include "Player.hpp"
-#include "IGameState.hpp"
 
 class IGameView;
 class IAction;
+class IGameState;
 
 class GameModel {
     // Only the base interface is a friend. It delegates state changes to derived classes.
@@ -22,6 +22,7 @@ private:
     void changeState(std::unique_ptr<IGameState> newState);
 
 public:
+    ~GameModel();
     void startGame();
     bool isGameOver();
     void stopGame();

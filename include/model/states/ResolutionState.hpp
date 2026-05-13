@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IGameState.hpp"
-#include "Bid.hpp"
 
 class ResolutionState : public IGameState {
 public:

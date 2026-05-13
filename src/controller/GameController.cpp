@@ -1,5 +1,7 @@
 #include "GameController.hpp"
-#include "ActionInterpreter.hpp"
+#include "GameModel.hpp"
+#include "IGameView.hpp"
+#include "IAction.hpp"
 
 #include <iostream>
 #include <string>
