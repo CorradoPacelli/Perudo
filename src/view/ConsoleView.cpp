@@ -16,6 +16,11 @@ std::unique_ptr<IAction> ConsoleView::waitForAction() {
     }
 }
 
+void ConsoleView::waitForContinue() {
+    std::string dummy;
+    std::getline(std::cin, dummy);
+}
+
 void ConsoleView::displayMessage(const std::string& message) {
     std::cout << message << std::endl;
 }

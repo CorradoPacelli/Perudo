@@ -5,12 +5,16 @@
 #include "IGameView.hpp"
 #include "Die.hpp"
 
+bool BiddingState::requiresAction() const {
+    return true;
+}
+
 void BiddingState::handleAction(GameModel& context, const IAction& action) {
     switch (action.getType())
     {
     case ActionType::DUDO :
     case ActionType::EXACTLY :
-        requestStateChange(context, std::make_unique<ResolutionState>());
+        requestStateChange(context, std::make_unique<ResolutionState>(action.getType()));
         break;
     
     case ActionType::BID :
@@ -26,6 +30,10 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
         // Uknown action for this BiddingState??
         break;
     }
+}
+
+void BiddingState::step(GameModel& context) {
+    // nothing to do here
 }
 
 void BiddingState::render(const GameModel& context, IGameView& view) const {

@@ -14,7 +14,13 @@ void GameController::run() {
 
     while (!model.isGameOver()) {
         model.render(view);
-        auto action = view.waitForAction();
-        model.handleAction(*action);
+        
+        if (model.requiresAction()) {
+            auto action = view.waitForAction();
+            model.handleAction(*action);
+        } else {
+            view.waitForContinue();
+            model.step();
+        }
     }
 }

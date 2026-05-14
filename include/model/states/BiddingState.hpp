@@ -9,10 +9,14 @@ public:
 
     void onEnter(GameModel& context) override;
 
+    bool requiresAction() const override;
+
     /**
      * @brief This method handles the bids and change the state accordingly
      */
     void handleAction(GameModel& context, const IAction& action) override;
+
+    void step(GameModel& context) override;
 
     void render(const GameModel& context, IGameView& view) const override;
 };

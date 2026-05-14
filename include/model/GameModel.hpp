@@ -19,6 +19,7 @@ private:
     bool gameOver = false;
     std::unique_ptr<IGameState> currentState;
 
+    // TODO: maybe I can get rid of this function and the friend class, step function in IGameState could return the new state...
     void changeState(std::unique_ptr<IGameState> newState);
 
 public:
@@ -38,6 +39,8 @@ public:
     const std::vector<Player>& getPlayers() const;
     std::optional<Bid> getLastBid() const;
     
-    void render(IGameView& view) const;
+    bool requiresAction() const;
     void handleAction(const IAction& action);
+    void step();
+    void render(IGameView& view) const;
 };

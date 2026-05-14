@@ -102,8 +102,18 @@ void GameModel::render(IGameView& view) const {
     }
 }
 
+bool GameModel::requiresAction() const {
+    return currentState ? currentState->requiresAction() : false;
+}
+
 void GameModel::handleAction(const IAction& action) {
     if (currentState) {
         currentState->handleAction(*this, action);
+    }
+}
+
+void GameModel::step() {
+    if (currentState) {
+        currentState->step(*this);
     }
 }

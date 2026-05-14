@@ -15,6 +15,10 @@ void EndGameState::onEnter(GameModel& context) {
     }
 }
 
+bool EndGameState::requiresAction() const {
+    return true;
+}
+
 void EndGameState::handleAction(GameModel& context, const IAction& action) {
     if (action.getType() == ActionType::RESET) {
         //context.resetGame(); TODO: reset Game
@@ -24,6 +28,10 @@ void EndGameState::handleAction(GameModel& context, const IAction& action) {
     } else {
         // TODO: Here we should never accept any other action
     }
+}
+
+void EndGameState::step(GameModel& context) {
+    // nothing to do here
 }
 
 void EndGameState::render(const GameModel& context, IGameView& view) const {

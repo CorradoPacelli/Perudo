@@ -16,6 +16,11 @@ public:
     virtual std::unique_ptr<IAction> waitForAction() = 0;
 
     /**
+     * @brief Waits for the user to just press Enter (no action parsed).
+     */
+    virtual void waitForContinue() = 0;
+
+    /**
      * @brief Displays a message to the player/user.
      */
     virtual void displayMessage(const std::string& message) = 0;
