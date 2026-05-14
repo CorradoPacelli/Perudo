@@ -27,7 +27,7 @@ void GameModel::nextPlayer() {
     int previousPlayer = currentPlayerIndex;
     do {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-    } while (!players.at(currentPlayerIndex).isAlive() || currentPlayerIndex == previousPlayer);
+    } while (!players.at(currentPlayerIndex).isAlive() && currentPlayerIndex != previousPlayer);
 
     if (currentPlayerIndex == previousPlayer){
         // TODO: 
@@ -61,7 +61,7 @@ Player& GameModel::getPreviousAlivePlayer() {
         if(previousPlayer < 0) {
             previousPlayer = players.size() -1;
         }
-    } while (!players.at(previousPlayer).isAlive() || currentPlayerIndex == previousPlayer);
+    } while (!players.at(previousPlayer).isAlive() && currentPlayerIndex != previousPlayer);
 
     if (currentPlayerIndex == previousPlayer){
         // TODO: 
