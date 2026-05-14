@@ -34,7 +34,7 @@ public:
      * @brief Advances the state machine if no user action is required.
      * @param context The main game model.
      */
-    virtual void step(GameModel& context) {}
+    virtual void step(GameModel& context) = 0;
 
     /**
      * @brief Displays the state's specific visual information to the user.

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IGameState.hpp"
+
 class EndGameState : public IGameState {
 public:
     EndGameState() = default;

@@ -23,6 +23,7 @@ private:
     void changeState(std::unique_ptr<IGameState> newState);
 
 public:
+    GameModel();
     ~GameModel();
     void startGame();
     bool isGameOver();

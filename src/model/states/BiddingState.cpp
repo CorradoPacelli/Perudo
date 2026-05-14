@@ -5,10 +5,6 @@
 #include "IGameView.hpp"
 #include "Die.hpp"
 
-bool BiddingState::requiresAction() const {
-    return true;
-}
-
 void BiddingState::handleAction(GameModel& context, const IAction& action) {
     switch (action.getType())
     {

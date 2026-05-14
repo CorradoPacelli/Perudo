@@ -2,6 +2,7 @@
 #include "RollingState.hpp"
 #include "IGameState.hpp"
 
+GameModel::GameModel() = default;
 GameModel::~GameModel() = default;
 
 void GameModel::startGame() {
@@ -33,7 +34,7 @@ void GameModel::nextPlayer() {
         // TODO: 
         // You should never be in the situation where there is only one player playing. 
         // The resoloution of the entire game should have already happen, let's throw for now
-        throw;
+         throw std::logic_error("Only one player is alive, cannot get next player.");
     }
 }
 
@@ -43,18 +44,14 @@ void GameModel::changeState(std::unique_ptr<IGameState> newState) {
 }
 
 Player& GameModel::getCurrentPlayer() { 
-    return players.at(currentPlayerIndex); 
+    return const_cast<Player&>(static_cast<const GameModel&>(*this).getCurrentPlayer()); 
 }
 
 const Player& GameModel::getCurrentPlayer() const { 
-    return getCurrentPlayer(); 
+    return players.at(currentPlayerIndex); 
 }
 
 const Player& GameModel::getPreviousAlivePlayer() const { 
-    return getPreviousAlivePlayer(); 
-}
-
-Player& GameModel::getPreviousAlivePlayer() { 
     int previousPlayer = currentPlayerIndex;
     do {
         --previousPlayer;
@@ -64,12 +61,15 @@ Player& GameModel::getPreviousAlivePlayer() {
     } while (!players.at(previousPlayer).isAlive() && currentPlayerIndex != previousPlayer);
 
     if (currentPlayerIndex == previousPlayer){
-        // TODO: 
-        // You should never be in the situation where there is only one player playing. 
-        // The resoloution of the entire game should have already happen, let's throw for now
-        throw;
+        // This should be unreachable if isOnlyOnePlayerAlive() is checked before state transitions.
+        throw std::logic_error("Only one player is alive, cannot get previous player.");
     }
     return players.at(previousPlayer);
+}
+
+Player& GameModel::getPreviousAlivePlayer() { 
+    // Safely call the const version and cast away the constness of the return type
+    return const_cast<Player&>(static_cast<const GameModel&>(*this).getPreviousAlivePlayer());
 }
 
 bool GameModel::isOnlyOnePlayerAlive() const {
@@ -85,7 +85,7 @@ bool GameModel::isOnlyOnePlayerAlive() const {
 }
 
 std::vector<Player>& GameModel::getPlayers() { 
-    return getPlayers(); 
+    return players; 
 }
 
 const std::vector<Player>& GameModel::getPlayers() const { 
