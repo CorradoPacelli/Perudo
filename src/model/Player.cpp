@@ -4,6 +4,9 @@
 
 Player::~Player() = default;
 
+Player::Player(Player&& other) noexcept = default;
+Player& Player::operator=(Player&& other) noexcept = default;
+
 Player::Player(std::string name) : name(name), alive(true), strategy(nullptr) {
     hand.reserve(6);
     for (int i = 0; i < 6; ++i){

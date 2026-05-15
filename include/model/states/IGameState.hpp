@@ -10,6 +10,10 @@ class IAction;
 class IGameState {
 public:
     virtual ~IGameState() = default;
+    IGameState(const IGameState&) = delete;
+    IGameState& operator=(const IGameState&) = delete;
+    IGameState(IGameState&&) noexcept = default;
+    IGameState& operator=(IGameState&&) noexcept = default;
 
     /**
      * @brief Called immediately when the game transitions into this state.

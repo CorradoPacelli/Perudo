@@ -3,6 +3,8 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
+#include <memory>
+#include <cctype>
 
 #include "DudoAction.hpp"
 #include "ExactlyAction.hpp"
@@ -13,7 +15,8 @@
 std::unique_ptr<IAction> ActionInterpreter::interpret(const std::string& rawInput) {
     std::string input = rawInput;
 
-    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+    // Safely cast tolower to avoid ambiguity
+    std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c){ return std::tolower(c); });
     
     std::stringstream ss(input);
     std::string command;

@@ -9,7 +9,6 @@ private:
 
 public:
     Die();
-    ~Die() = default;
 
     static short int roll();
     short int getFace() const;

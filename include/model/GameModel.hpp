@@ -25,11 +25,16 @@ private:
 public:
     GameModel();
     ~GameModel();
+
+    GameModel(const GameModel& other) = delete;
+    GameModel& operator=(const GameModel& other) = delete;
+    GameModel(GameModel&& other) noexcept;
+    GameModel& operator=(GameModel&& other) noexcept;
+
     void startGame();
     bool isGameOver();
     void stopGame();
     
-    void addPlayer(const Player player);
     void nextPlayer();
     Player& getCurrentPlayer();
     const Player& getCurrentPlayer() const;
@@ -44,4 +49,9 @@ public:
     void handleAction(const IAction& action);
     void step();
     void render(IGameView& view) const;
+
+    template<typename... Args>
+    void addPlayer(Args&&... args) {
+        players.emplace_back(std::forward<Args>(args)...);
+    }
 };

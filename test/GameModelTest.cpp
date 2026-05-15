@@ -20,8 +20,8 @@ TEST_F(GameModelTest, AddPlayer) {
     Player player1("Alice");
     Player player2("Bob");
 
-    model.addPlayer(player1);
-    model.addPlayer(player2);
+    model.addPlayer(std::move(player1));
+    model.addPlayer(std::move(player2));
 
     auto& players = model.getPlayers();
     ASSERT_EQ(players.size(), 2);
@@ -35,8 +35,8 @@ TEST_F(GameModelTest, GetCurrentPlayer) {
     Player player1("Alice");
     Player player2("Bob");
 
-    model.addPlayer(player1);
-    model.addPlayer(player2);
+    model.addPlayer(std::move(player1));
+    model.addPlayer(std::move(player2));
 
     Player& current = model.getCurrentPlayer();
     EXPECT_EQ(current.getName(), "Alice");
@@ -49,9 +49,9 @@ TEST_F(GameModelTest, NextPlayer) {
     Player player2("Bob");
     Player player3("Charlie");
 
-    model.addPlayer(player1);
-    model.addPlayer(player2);
-    model.addPlayer(player3);
+    model.addPlayer(std::move(player1));
+    model.addPlayer(std::move(player2));
+    model.addPlayer(std::move(player3));
 
     // Initial current player should be Alice
     EXPECT_EQ(model.getCurrentPlayer().getName(), "Alice");
@@ -75,8 +75,8 @@ TEST_F(GameModelTest, IsOnlyOnePlayerAlive_MultiplePlayers) {
     Player player1("Alice");
     Player player2("Bob");
 
-    model.addPlayer(player1);
-    model.addPlayer(player2);
+    model.addPlayer(std::move(player1));
+    model.addPlayer(std::move(player2));
 
     EXPECT_FALSE(model.isOnlyOnePlayerAlive());
 }
@@ -86,7 +86,7 @@ TEST_F(GameModelTest, IsOnlyOnePlayerAlive_OnePlayer) {
     GameModel model;
     Player player1("Alice");
 
-    model.addPlayer(player1);
+    model.addPlayer(std::move(player1));
 
     EXPECT_TRUE(model.isOnlyOnePlayerAlive());
 }

@@ -5,6 +5,9 @@
 GameModel::GameModel() = default;
 GameModel::~GameModel() = default;
 
+GameModel::GameModel(GameModel&& other) noexcept = default;
+GameModel& GameModel::operator=(GameModel&& other) noexcept = default;
+
 void GameModel::startGame() {
     // TODO: check for other things to do when a game start
     gameOver = false;
@@ -18,10 +21,6 @@ bool GameModel::isGameOver() {
 
 void GameModel::stopGame() {
     gameOver = true;
-}
-
-void GameModel::addPlayer(const Player player) { 
-    players.emplace_back(player); 
 }
 
 void GameModel::nextPlayer() { 

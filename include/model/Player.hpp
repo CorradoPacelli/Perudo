@@ -20,6 +20,11 @@ private:
 public:
 
     ~Player();
+
+    Player(const Player& other) = delete;
+    Player& operator=(const Player& other) = delete;
+    Player(Player&& other) noexcept;
+    Player& operator=(Player&& other) noexcept;
     
     /**
      * @brief Standard real player constructor
