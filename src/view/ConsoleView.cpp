@@ -1,5 +1,7 @@
 #include "ConsoleView.hpp"
 #include "ActionInterpreter.hpp"
+#include "IAction.hpp"
+
 #include <iostream>
 
 std::unique_ptr<IAction> ConsoleView::waitForAction() {

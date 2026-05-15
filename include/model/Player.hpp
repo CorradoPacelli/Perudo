@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <optional>
+#include <vector>
 
 #include "Bid.hpp"
 

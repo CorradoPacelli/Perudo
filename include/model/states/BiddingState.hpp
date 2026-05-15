@@ -9,8 +9,6 @@ public:
 
     void onEnter(GameModel& context) override;
 
-    bool requiresAction() const override;
-
     /**
      * @brief This method handles the bids and change the state accordingly
      */

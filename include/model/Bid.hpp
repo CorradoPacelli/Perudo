@@ -12,4 +12,6 @@ public:
     int getQuantity() const;
     int getFace() const;
     bool isValidAfter(const Bid& other) const;
+
+    bool operator==(const Bid& other) const;
 };

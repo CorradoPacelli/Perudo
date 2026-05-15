@@ -9,8 +9,6 @@ public:
 
     void onEnter(GameModel& context) override;
 
-    bool requiresAction() const override;
-
     void handleAction(GameModel& context, const IAction& action) override;
 
     void step(GameModel& context) override;

@@ -12,4 +12,6 @@ public:
 
     static short int roll();
     short int getFace() const;
+
+    bool operator==(const Die& other) const;
 };

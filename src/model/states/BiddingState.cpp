@@ -5,26 +5,29 @@
 #include "IGameView.hpp"
 #include "Die.hpp"
 
+void BiddingState::onEnter(GameModel& context) {
+    // Nothing to do here
+}
+
 void BiddingState::handleAction(GameModel& context, const IAction& action) {
-    switch (action.getType())
-    {
-    case ActionType::DUDO :
-    case ActionType::EXACTLY :
-        requestStateChange(context, std::make_unique<ResolutionState>(action.getType()));
-        break;
-    
-    case ActionType::BID :
-        const auto& bidAction = static_cast<const BidAction&>(action);
-        std::optional<Bid> lastBid = context.getLastBid();
-        if (lastBid && bidAction.getBid().isValidAfter(*lastBid)) {
-            context.nextPlayer();
-        } else {
-            //make another Bid!
-        }
-        break;
-    default:
-        // Uknown action for this BiddingState??
-        break;
+    switch (action.getType()) {
+        case ActionType::DUDO :
+        case ActionType::EXACTLY :
+            requestStateChange(context, std::make_unique<ResolutionState>(action.getType()));
+            break;
+        
+        case ActionType::BID : {
+            const auto& bidAction = static_cast<const BidAction&>(action);
+            std::optional<Bid> lastBid = context.getLastBid();
+            if (lastBid && bidAction.getBid().isValidAfter(*lastBid)) {
+                context.nextPlayer();
+            } else {
+                //make another Bid!
+            }
+            break; }
+        default:
+            // Uknown action for this BiddingState??
+            break;
     }
 }
 

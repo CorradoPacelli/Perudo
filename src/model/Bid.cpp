@@ -28,3 +28,7 @@ bool Bid::isValidAfter(const Bid& other) const {
     }
     return false;
 }
+
+bool Bid::operator==(const Bid& other) const {
+    return other.getFace() == face && other.getQuantity() == quantity;
+}

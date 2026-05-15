@@ -15,4 +15,8 @@ short int Die::getFace() const {
     return face; 
 }
 
+bool Die::operator==(const Die& other) const{
+    return face == other.face;
+}
+
 std::mt19937 Die::randomGenerator(std::random_device{}());
