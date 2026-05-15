@@ -10,6 +10,7 @@ class IAction;
 class IGameState {
 public:
     virtual ~IGameState() = default;
+    IGameState() = default;
     IGameState(const IGameState&) = delete;
     IGameState& operator=(const IGameState&) = delete;
     IGameState(IGameState&&) noexcept = default;
