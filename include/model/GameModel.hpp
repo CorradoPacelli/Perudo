@@ -12,6 +12,8 @@ class IGameState;
 class GameModel {
     // Only the base interface is a friend. It delegates state changes to derived classes.
     friend class IGameState;
+    // Test accessor to allow unit tests to inspect private state without polluting the public API
+    friend class GameModelTestAccessor;
 
 private:
     std::vector<Player> players;

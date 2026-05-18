@@ -4,15 +4,13 @@ project(Perudo VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Force compilers to use color output, even when Ninja buffers the output
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
 file(GLOB_RECURSE SOURCES 
-    "src/*.cpp"
-    "src/*.hpp"
+    "src/**/*.cpp"
+    "src/**/*.hpp"
 )
 
 list(FILTER SOURCES EXCLUDE REGEX "main\\.cpp$")
@@ -51,11 +49,21 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 file(GLOB_RECURSE TEST_SOURCES 
-    "test/*.cpp"
+    "test/**/*.cpp"
 )
 
 add_executable(${PROJECT_NAME}_test ${TEST_SOURCES})
 target_link_libraries(${PROJECT_NAME}_test PRIVATE PerudoCore GTest::gtest_main)
 
+target_include_directories(${PROJECT_NAME}_test PRIVATE 
+    ${PROJECT_SOURCE_DIR}/test/model
+)
+
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_test)
+
+# Automatically run tests after the test executable is built.
+add_custom_command(
+    TARGET ${PROJECT_NAME}_test POST_BUILD
+    COMMAND $<TARGET_FILE:${PROJECT_NAME}_test> --gtest_color=yes
+    COMMENT "Running tests...")
