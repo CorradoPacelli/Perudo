@@ -19,7 +19,7 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
         case ActionType::BID : {
             const auto& bidAction = static_cast<const BidAction&>(action);
             std::optional<Bid> lastBid = context.getLastBid();
-            if (lastBid && bidAction.getBid().isValidAfter(*lastBid)) {
+            if (lastBid && bidAction.getBid() > *lastBid) {
                 context.nextPlayer();
             } else {
                 //make another Bid!

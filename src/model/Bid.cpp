@@ -21,7 +21,7 @@ int Bid::getFace() const {
     return face;
 }
 
-bool Bid::isValidAfter(const Bid& other) const {
+bool Bid::operator>(const Bid& other) const {
     if (quantity > other.quantity) return true;
     if (quantity == other.quantity) {
         return face > other.face;
