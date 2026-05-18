@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "EndGameState.hpp"
 #include "GameModel.hpp"
 #include "RollingState.hpp"
@@ -5,7 +7,7 @@
 #include "IGameView.hpp"
 
 void EndGameState::onEnter(GameModel& context) {
-    if (!context.isOnlyOnePlayerAlive()) throw; //this should not be possible 
+    if (!context.isOnlyOnePlayerAlive()) throw std::logic_error("More than one player alive in EndGameState"); //this should not be possible 
     for (const auto& player : context.getPlayers()) {
         if (player.isAlive()) {
             std::string winnerName = player.getName();

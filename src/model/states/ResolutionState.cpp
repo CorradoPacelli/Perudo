@@ -1,4 +1,5 @@
 #include <optional>
+#include <stdexcept>
 
 #include "ResolutionState.hpp"
 #include "RollingState.hpp"
@@ -14,7 +15,7 @@ ResolutionState::ResolutionState(ActionType triggerAction) : triggerAction(trigg
 
 void ResolutionState::onEnter(GameModel& context) {
     std::optional<Bid> lastBid = context.getLastBid();
-    if (!lastBid) throw; // TODO: the first action can not be Dudo! throw for now;
+    if (!lastBid) throw std::logic_error("No previous bid to resolve"); // TODO: the first action can not be Dudo! throw for now;
 
     int result = checkLastBid(context);
 
@@ -88,7 +89,7 @@ void ResolutionState::render(const GameModel& context, IGameView& view) const {
 
 int ResolutionState::checkLastBid(GameModel& context) {
     std::optional<Bid> toBeat = context.getPreviousAlivePlayer().getLastBid();
-    if (!toBeat) throw; //This should never happen, for now let's throw
+    if (!toBeat) throw std::logic_error("No previous bid to beat"); //This should never happen, for now let's throw
     int actualyQuantity = 0;
     for (auto& player : context.getPlayers()) {
         if (!player.isAlive()) continue;
