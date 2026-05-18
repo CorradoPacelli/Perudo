@@ -52,14 +52,6 @@ void ResolutionState::onEnter(GameModel& context) {
     }
 }
 
-bool ResolutionState::requiresAction() const {
-    return false;
-}
-
-void ResolutionState::handleAction(GameModel& context, const IAction& action) {
-    // This state does not require action
-}
-
 void ResolutionState::step(GameModel& context) {
     //Decide where to transit
     if (context.isOnlyOnePlayerAlive()){

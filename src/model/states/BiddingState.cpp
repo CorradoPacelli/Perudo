@@ -9,6 +9,10 @@ void BiddingState::onEnter(GameModel& context) {
     // Nothing to do here
 }
 
+bool BiddingState::requiresAction() const {
+    return true;
+}
+
 void BiddingState::handleAction(GameModel& context, const IAction& action) {
     switch (action.getType()) {
         case ActionType::DUDO :
@@ -29,10 +33,6 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
             // Uknown action for this BiddingState??
             break;
     }
-}
-
-void BiddingState::step(GameModel& context) {
-    // nothing to do here
 }
 
 void BiddingState::render(const GameModel& context, IGameView& view) const {

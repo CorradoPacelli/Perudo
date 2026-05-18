@@ -23,23 +23,23 @@ public:
     virtual void onEnter(GameModel& context) = 0;
 
     /**
+     * @brief Defines whether this state needs an explicit user action to proceed.
+     * @return true if the state requires an action, false if it just needs to step.
+     */
+    virtual bool requiresAction() const;
+
+    /**
      * @brief Handles a specific user action for this state.
      * @param context The main game model.
      * @param action The action parsed from the user input.
      */
-    virtual void handleAction(GameModel& context, const IAction& action) = 0;
-    
-    /**
-     * @brief Defines whether this state needs an explicit user action to proceed.
-     * @return true if the state requires an action, false if it just needs to step.
-     */
-    virtual bool requiresAction() const { return true; }
+    virtual void handleAction(GameModel& context, const IAction& action);
 
     /**
      * @brief Advances the state machine if no user action is required.
      * @param context The main game model.
      */
-    virtual void step(GameModel& context) = 0;
+    virtual void step(GameModel& context);
 
     /**
      * @brief Displays the state's specific visual information to the user.
@@ -54,5 +54,5 @@ protected:
      * @param context The main game model.
      * @param newState The new state to transition to.
      */
-    void requestStateChange(GameModel& context, std::unique_ptr<IGameState> newState);
+    virtual void requestStateChange(GameModel& context, std::unique_ptr<IGameState> newState) final;
 };

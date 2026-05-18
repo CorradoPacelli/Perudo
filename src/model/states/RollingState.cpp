@@ -12,14 +12,6 @@ void RollingState::onEnter(GameModel& context) {
     }
 }
 
-bool RollingState::requiresAction() const {
-    return false;
-}
-
-void RollingState::handleAction(GameModel& context, const IAction& action) {
-    // nothing to do in this state, there is no input
-}
-
 void RollingState::step(GameModel& context) {
     requestStateChange(context, std::make_unique<BiddingState>());
 }
