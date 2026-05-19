@@ -11,6 +11,7 @@ class IStrategy;
 class Die;
 
 class Player {
+    friend class GameModelTestAccessor;
 private:
     std::string name;
     std::vector<Die> hand;

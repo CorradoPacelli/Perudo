@@ -3,6 +3,7 @@
 #include <random>
 
 class Die {
+    friend class GameModelTestAccessor;
 private:
     short int face;
     static std::mt19937 randomGenerator;

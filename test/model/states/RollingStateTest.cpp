@@ -20,15 +20,10 @@ protected:
     }
 };
 
-TEST_F(RollingStateTest, RequiresActionReturnsFalse) {
+TEST_F(RollingStateTest, HandleActionIsCorretlyDisabled) {
     RollingState state;
-    
+
     EXPECT_FALSE(state.requiresAction());
-}
-
-TEST_F(RollingStateTest, HandleActionThrows) {
-    RollingState state;
-
     EXPECT_THROW(state.handleAction(model, DudoAction()), std::logic_error);
 }
 
@@ -50,7 +45,6 @@ TEST_F(RollingStateTest, OnEnterRollsDiceAndClearsHistory) {
 }
 
 TEST_F(RollingStateTest, StepTransitions) {
-
     RollingState state;
     state.step(model);
     

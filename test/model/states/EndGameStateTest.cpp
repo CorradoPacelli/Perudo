@@ -15,6 +15,11 @@ protected:
     GameModel model;
 };
 
+TEST_F(EndGameStateTest, StepIsCorretlyDisabled) {
+    EndGameState endState;
+    EXPECT_THROW(endState.step(model), std::logic_error);
+}
+
 TEST_F(EndGameStateTest, OnEnterThrowsIfMultiplePlayersAlive) {
     model.addPlayer(Player("Saitama", 5));
     model.addPlayer(Player("Genos", 5));
@@ -35,27 +40,17 @@ TEST_F(EndGameStateTest, OnEnterSucceedsWithOnePlayerAlive) {
     EXPECT_NO_THROW(endState.onEnter(model));
 }
 
-TEST_F(EndGameStateTest, RequiresActionReturnsFalse) {
-    EndGameState endState;
-    
-    EXPECT_TRUE(endState.requiresAction());
-}
-
 TEST_F(EndGameStateTest, HandleActionTransitToNewGame) {
     EndGameState endState;
 
+    EXPECT_TRUE(endState.requiresAction());
     EXPECT_NO_THROW(endState.handleAction(model, ResetAction()));
     EXPECT_NE(dynamic_cast<RollingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
 }
 
-TEST_F(EndGameStateTest, HandleActionStopGame) {
+TEST_F(EndGameStateTest, HandleActionStopGameWithMoreThenOnePlayerAlive) {
     EndGameState endState;
 
     EXPECT_NO_THROW(endState.handleAction(model, ExitAction()));
     EXPECT_TRUE(model.isGameOver());
-}
-
-TEST_F(EndGameStateTest, StepThrow) {
-    EndGameState endState;
-    EXPECT_THROW(endState.step(model), std::logic_error);
 }

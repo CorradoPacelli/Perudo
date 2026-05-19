@@ -1,5 +1,8 @@
+#include <stdexcept>
+
 #include "BiddingState.hpp"
 #include "ResolutionState.hpp"
+#include "EndGameState.hpp"
 #include "BidAction.hpp"
 #include "GameModel.hpp"
 #include "IGameView.hpp"
@@ -19,18 +22,27 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
         case ActionType::EXACTLY :
             requestStateChange(context, std::make_unique<ResolutionState>(action.getType()));
             break;
-        
         case ActionType::BID : {
             const auto& bidAction = static_cast<const BidAction&>(action);
             std::optional<Bid> lastBid = context.getLastBid();
-            if (lastBid && bidAction.getBid() > *lastBid) {
+            if (!lastBid) {
+                context.getCurrentPlayer().addBid(bidAction.getBid());
+                context.nextPlayer();
+            } else if (lastBid && bidAction.getBid() > *lastBid) {
+                context.getCurrentPlayer().addBid(bidAction.getBid());
                 context.nextPlayer();
             } else {
                 //make another Bid!
+                throw std::logic_error("Bid not valid! This should not be an expetion, maybe");
             }
             break; }
+        case ActionType::EXIT :
+            context.stopGame();
+            requestStateChange(context, std::make_unique<EndGameState>());
+            break;
         default:
             // Uknown action for this BiddingState??
+            throw std::logic_error("Unknown action for BiddingState");
             break;
     }
 }

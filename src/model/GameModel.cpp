@@ -92,7 +92,7 @@ const std::vector<Player>& GameModel::getPlayers() const {
 }
 
 std::optional<Bid> GameModel::getLastBid() const { 
-    return players.at(currentPlayerIndex).getLastBid(); 
+    return getPreviousAlivePlayer().getLastBid(); 
 }
 
 void GameModel::render(IGameView& view) const {

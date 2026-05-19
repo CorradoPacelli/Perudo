@@ -7,7 +7,9 @@
 #include "IGameView.hpp"
 
 void EndGameState::onEnter(GameModel& context) {
-    if (!context.isOnlyOnePlayerAlive()) throw std::logic_error("More than one player alive in EndGameState"); //this should not be possible 
+    if (!context.isOnlyOnePlayerAlive()) {
+        throw std::logic_error("Someone asked to end the game in the middle of the game :("); //this should not be possible
+    }
     for (const auto& player : context.getPlayers()) {
         if (player.isAlive()) {
             std::string winnerName = player.getName();
