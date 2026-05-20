@@ -30,7 +30,7 @@ void EndGameState::handleAction(GameModel& context, const IAction& action) {
     } else if (action.getType() == ActionType::EXIT) {
         context.stopGame();
     } else {
-        // TODO: Here we should never accept any other action
+        throw std::invalid_argument("You can only 'reset' or 'exit' when the game is over.");
     }
 }
 

@@ -40,7 +40,7 @@ TEST_F(BiddingStateTest, HandleDudoActionTransitionsToResolutionState) {
     DudoAction dudo;
 
     // Can not say dudo as first action
-    EXPECT_THROW(state.handleAction(model, dudo), std::logic_error); 
+    EXPECT_THROW(state.handleAction(model, dudo), std::invalid_argument); 
 
     model.getPreviousAlivePlayer().addBid(Bid(1, 1));
     state.handleAction(model, dudo);
@@ -53,7 +53,7 @@ TEST_F(BiddingStateTest, HandleExactlyActionTransitionsToResolutionState) {
     ExactlyAction exactly;
 
     // Can not say exactly as first action
-    EXPECT_THROW(state.handleAction(model, exactly), std::logic_error); 
+    EXPECT_THROW(state.handleAction(model, exactly), std::invalid_argument); 
 
     model.getPreviousAlivePlayer().addBid(Bid(1, 1));
     state.handleAction(model, exactly);
@@ -116,11 +116,11 @@ TEST_F(BiddingStateTest, HandleInvalidBidActionThrows) {
     
     // Saitama tries to make a lower bid
     BidAction lowerBid(Bid(2, 6));
-    EXPECT_NO_THROW(state.handleAction(model, lowerBid));
+    EXPECT_THROW(state.handleAction(model, lowerBid), std::invalid_argument);
 
     // Saitama tries to make an equal bid
     BidAction equalBid(Bid(3, 3));
-    EXPECT_NO_THROW(state.handleAction(model, equalBid));
+    EXPECT_THROW(state.handleAction(model, equalBid), std::invalid_argument);
 
     EXPECT_EQ(model.getCurrentPlayer().getName(), "Saitama");
 

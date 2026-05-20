@@ -21,7 +21,7 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
         case ActionType::DUDO :
         case ActionType::EXACTLY : {
             if (!context.getLastBid().has_value()) {
-                throw std::logic_error("Cannot call Dudo or Exactly when no bid has been made.");
+                throw std::invalid_argument("Cannot call Dudo or Exactly when no bid has been made.");
             }
             requestStateChange(context, std::make_unique<ResolutionState>(action.getType()));
             break; }
@@ -33,10 +33,7 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
                 context.nextPlayer();
             } else {
                 // Invalid bid (not higher than the last one).
-                // Do nothing. The state does not change, and the same player will be
-                // prompted for another action by the controller loop. This is not an
-                // exceptional situation, but rather an invalid user input that the
-                // game must handle gracefully.
+                throw std::invalid_argument("Current bid is lower or equal to the one done previously");
             }
             break; }
         case ActionType::EXIT :
@@ -45,7 +42,7 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
             break;
         default:
             // Uknown action for this BiddingState??
-            throw std::logic_error("Unknown action for BiddingState");
+            throw std::invalid_argument("Unknown action for BiddingState");
             break;
     }
 }
@@ -64,7 +61,7 @@ void BiddingState::render(const GameModel& context, IGameView& view) const {
     auto lastBid = context.getLastBid();
     if (lastBid) {
         msg += "Last bid: 'There are at least " + std::to_string(lastBid->getQuantity()) + " dice with face " + std::to_string(lastBid->getFace()) + "'\n";
-        msg += "Made by: " + context.getPreviousAlivePlayer().getName() + "\n";
+        msg += "Made by: " + context.getPreviousAlivePlayer().getName();
     } else {
         msg += "You are the first player to bid!";
     }

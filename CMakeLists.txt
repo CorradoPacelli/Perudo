@@ -57,6 +57,8 @@ target_link_libraries(${PROJECT_NAME}_test PRIVATE PerudoCore GTest::gtest_main)
 
 target_include_directories(${PROJECT_NAME}_test PRIVATE 
     ${PROJECT_SOURCE_DIR}/test/model
+    ${PROJECT_SOURCE_DIR}/test/controller
+    ${PROJECT_SOURCE_DIR}/test/view
 )
 
 include(GoogleTest)

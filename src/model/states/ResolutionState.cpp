@@ -109,7 +109,6 @@ void ResolutionState::render(const GameModel& context, IGameView& view) const {
         }
     }
 
-    msg += "\n\nPress Enter to continue...";
     view.displayMessage(msg);
 }
 

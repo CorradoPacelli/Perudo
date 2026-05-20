@@ -41,7 +41,7 @@ std::unique_ptr<IAction> ActionInterpreter::interpret(const std::string& rawInpu
         }
     }
 
-    if (command == "exit" || command == "quit") {
+    if (command == "exit" || command == "quit" || command == "q") {
         return std::make_unique<ExitAction>();
     }
 
