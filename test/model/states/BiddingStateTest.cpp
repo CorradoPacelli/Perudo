@@ -64,6 +64,10 @@ TEST_F(BiddingStateTest, HandleExactlyActionTransitionsToResolutionState) {
 TEST_F(BiddingStateTest, HandleFirstValidBidAction) {
     BiddingState state;
     BidAction firstBid(Bid(3, 4));
+
+    model.startGame();
+    EXPECT_NE(dynamic_cast<RollingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
+    model.step();
     
     ASSERT_EQ(model.getCurrentPlayer().getName(), "Saitama");
     ASSERT_FALSE(model.getLastBid().has_value());
@@ -75,12 +79,16 @@ TEST_F(BiddingStateTest, HandleFirstValidBidAction) {
     EXPECT_EQ(model.getPreviousAlivePlayer().getLastBid().value(), firstBid.getBid());
     EXPECT_EQ(model.getCurrentPlayer().getName(), "Genos");
 
-    // TODO: fix this!! this is not true but it should be true~
-    //EXPECT_NE(dynamic_cast<BiddingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
+    EXPECT_NE(dynamic_cast<BiddingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
 }
 
 TEST_F(BiddingStateTest, HandleSubsequentValidBidAction) {
     BiddingState state;
+
+    model.startGame();
+    EXPECT_NE(dynamic_cast<RollingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
+    model.step();
+
     // The previous player (King) makes a bid first.
     model.getPlayers()[2].addBid(Bid(2, 2));
     ASSERT_EQ(model.getCurrentPlayer().getName(), "Saitama");
@@ -93,25 +101,30 @@ TEST_F(BiddingStateTest, HandleSubsequentValidBidAction) {
     EXPECT_EQ(model.getPreviousAlivePlayer().getLastBid().value(), higherBid.getBid());
     EXPECT_EQ(model.getCurrentPlayer().getName(), "Genos");
 
-    // TODO: fix this!! this is not true but it should be true
-    //EXPECT_NE(dynamic_cast<BiddingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
+    EXPECT_NE(dynamic_cast<BiddingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
 }
 
 TEST_F(BiddingStateTest, HandleInvalidBidActionThrows) {
     BiddingState state;
+
+    model.startGame();
+    EXPECT_NE(dynamic_cast<RollingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
+    model.step();
+
     // The previous player (King) makes a bid first.
     model.getPlayers()[2].addBid(Bid(3, 3));
     
     // Saitama tries to make a lower bid
     BidAction lowerBid(Bid(2, 6));
-    EXPECT_THROW(state.handleAction(model, lowerBid), std::logic_error);
+    EXPECT_NO_THROW(state.handleAction(model, lowerBid));
 
     // Saitama tries to make an equal bid
     BidAction equalBid(Bid(3, 3));
-    EXPECT_THROW(state.handleAction(model, equalBid), std::logic_error);
+    EXPECT_NO_THROW(state.handleAction(model, equalBid));
 
-    // TODO: fix this!! this is not true but it should be true
-    //EXPECT_NE(dynamic_cast<BiddingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
+    EXPECT_EQ(model.getCurrentPlayer().getName(), "Saitama");
+
+    EXPECT_NE(dynamic_cast<BiddingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
 }
 
 TEST_F(BiddingStateTest, HandleExitActionStopsGameAndTransitions) {

@@ -19,21 +19,24 @@ bool BiddingState::requiresAction() const {
 void BiddingState::handleAction(GameModel& context, const IAction& action) {
     switch (action.getType()) {
         case ActionType::DUDO :
-        case ActionType::EXACTLY :
+        case ActionType::EXACTLY : {
+            if (!context.getLastBid().has_value()) {
+                throw std::logic_error("Cannot call Dudo or Exactly when no bid has been made.");
+            }
             requestStateChange(context, std::make_unique<ResolutionState>(action.getType()));
-            break;
+            break; }
         case ActionType::BID : {
             const auto& bidAction = static_cast<const BidAction&>(action);
             std::optional<Bid> lastBid = context.getLastBid();
-            if (!lastBid) {
-                context.getCurrentPlayer().addBid(bidAction.getBid());
-                context.nextPlayer();
-            } else if (lastBid && bidAction.getBid() > *lastBid) {
+            if (!lastBid.has_value() || bidAction.getBid() > lastBid.value()) {
                 context.getCurrentPlayer().addBid(bidAction.getBid());
                 context.nextPlayer();
             } else {
-                //make another Bid!
-                throw std::logic_error("Bid not valid! This should not be an expetion, maybe");
+                // Invalid bid (not higher than the last one).
+                // Do nothing. The state does not change, and the same player will be
+                // prompted for another action by the controller loop. This is not an
+                // exceptional situation, but rather an invalid user input that the
+                // game must handle gracefully.
             }
             break; }
         case ActionType::EXIT :

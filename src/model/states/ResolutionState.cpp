@@ -19,23 +19,36 @@ void ResolutionState::onEnter(GameModel& context) {
 
     int result = checkLastBid(context);
 
+    resultMessage.empty();
+    resultMessage = "The last bid was: 'There are at least " + std::to_string(lastBid->getQuantity()) + " dice with face " + std::to_string(lastBid->getFace()) + "'\n";
+    resultMessage += "Made by: " + context.getPreviousAlivePlayer().getName() + "\n";
+    
+    for (const auto& player : context.getPlayers()) {
+        if (!player.isAlive()) continue;
+            resultMessage += player.getName() + ": ";
+        for (const auto& die : player.getHand()) {
+            resultMessage += std::to_string(die.getFace()) + " ";
+        }
+        resultMessage += "\n";
+    }
+
     switch (triggerAction)
     {
     case ActionType::DUDO :
 
         if (result >= 0){
             context.getCurrentPlayer().loseDie();
-            resultMessage = context.getCurrentPlayer().getName() + " was wrong and loses a die!";
+            resultMessage += context.getCurrentPlayer().getName() + " was wrong and loses a die!";
         } else {
             context.getPreviousAlivePlayer().loseDie();
-            resultMessage = context.getPreviousAlivePlayer().getName() + " was caught lying and loses a die!";
+            resultMessage += context.getPreviousAlivePlayer().getName() + " was caught lying and loses a die!";
         }
         break;
 
     case ActionType::EXACTLY :
 
         if (result == 0){
-            resultMessage = context.getCurrentPlayer().getName() + " guessed exactly! Everyone else loses a die!";
+            resultMessage += context.getCurrentPlayer().getName() + " guessed exactly! Everyone else loses a die!";
             for (auto& p : context.getPlayers()) {
                 if (p != context.getCurrentPlayer() ){
                     p.loseDie();
@@ -43,7 +56,7 @@ void ResolutionState::onEnter(GameModel& context) {
             }
         } else {
             context.getCurrentPlayer().loseDice(2);
-            resultMessage = context.getCurrentPlayer().getName() + " was wrong and loses 2 dice!";
+            resultMessage += context.getCurrentPlayer().getName() + " was wrong and loses 2 dice!";
         }
         break;
     
@@ -63,15 +76,6 @@ void ResolutionState::step(GameModel& context) {
 
 void ResolutionState::render(const GameModel& context, IGameView& view) const {
     std::string msg = "\n--- RESOLUTION PHASE---\n";
-    
-    for (const auto& player : context.getPlayers()) {
-        if (!player.isAlive()) continue;
-        msg += player.getName() + ": ";
-        for (const auto& die : player.getHand()) {
-            msg += std::to_string(die.getFace()) + " ";
-        }
-        msg += "\n";
-    }
     
     msg += "\n" + resultMessage;
     msg += "\nPress Enter to continue..."; 
