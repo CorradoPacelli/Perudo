@@ -45,6 +45,7 @@ TEST_F(ResolutionStateTest, OnEnterWithCorrectDudo) {
 
     ResolutionState state(ActionType::DUDO);
     EXPECT_NO_THROW(state.onEnter(model));
+    EXPECT_NO_THROW(state.step(model));
     
     // King was wrong, so he loses a die.
     EXPECT_EQ(model.getPreviousAlivePlayer().getDiceCount(), 4);
@@ -61,6 +62,7 @@ TEST_F(ResolutionStateTest, OnEnterWithWrongDudo) {
 
     ResolutionState state(ActionType::DUDO);
     EXPECT_NO_THROW(state.onEnter(model));
+    EXPECT_NO_THROW(state.step(model));
     
     // King is right Saitama should lose a die
     EXPECT_EQ(model.getPreviousAlivePlayer().getDiceCount(), 5);
@@ -77,6 +79,7 @@ TEST_F(ResolutionStateTest, OnEnterWithCorrectExactly) {
 
     ResolutionState state(ActionType::EXACTLY);
     EXPECT_NO_THROW(state.onEnter(model));
+    EXPECT_NO_THROW(state.step(model));
 
     // Saitama is correct, everyone else loses a die
     EXPECT_EQ(model.getPlayers()[0].getDiceCount(), 5); // Saitama
@@ -94,6 +97,7 @@ TEST_F(ResolutionStateTest, OnEnterWithWrongExactly) {
 
     ResolutionState state(ActionType::EXACTLY);
     EXPECT_NO_THROW(state.onEnter(model));
+    EXPECT_NO_THROW(state.step(model));
 
     // Saitama is wrong, he loses 2 dice
     EXPECT_EQ(model.getPlayers()[0].getDiceCount(), 3); // Saitama

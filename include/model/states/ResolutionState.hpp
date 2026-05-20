@@ -1,7 +1,10 @@
 #pragma once
 
+#include <optional>
+
 #include "IGameState.hpp"
 #include "IAction.hpp"
+#include "Bid.hpp"
 
 class ResolutionState : public IGameState {
 public:
@@ -16,13 +19,10 @@ public:
 
 private:
     ActionType triggerAction;
-    std::string resultMessage;
-    
-    /** 
-     * @brief This is an helper function to check if the last bid was:
-     * a lie            -> return -1
-     * perfect          -> return 0 (exactly the number of dice)
-     * fair             -> return 1
-     */
-    int checkLastBid(GameModel& context);
+
+    std::optional<Bid> resolvedBid;
+    int actualDiceQuantity = 0;
+    bool callerWon = false;
+
+    int countDiceOfFace(const GameModel& context, short int face) const;
 };
