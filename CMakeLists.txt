@@ -25,6 +25,7 @@ target_include_directories(PerudoCore PUBLIC
     ${PROJECT_INCLUDE_DIR}/model/strategies
     ${PROJECT_INCLUDE_DIR}/controller
     ${PROJECT_INCLUDE_DIR}/view
+    ${PROJECT_INCLUDE_DIR}/common
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp)
@@ -36,8 +37,18 @@ else()
     target_compile_options(PerudoCore PRIVATE -Wall -Wextra -Wpedantic -fdiagnostics-color=always)
 endif()
 
-# Google Test setup
+# ASIO (Standalone) setup
 include(FetchContent)
+FetchContent_Declare(
+  asio
+  URL https://github.com/chriskohlhoff/asio/archive/asio-1-30-2.zip
+)
+FetchContent_MakeAvailable(asio)
+
+target_include_directories(PerudoCore PUBLIC ${asio_SOURCE_DIR}/asio/include)
+target_compile_definitions(PerudoCore PUBLIC ASIO_STANDALONE)
+
+# Google Test setup
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
@@ -58,7 +69,7 @@ target_link_libraries(${PROJECT_NAME}_test PRIVATE PerudoCore GTest::gtest_main)
 target_include_directories(${PROJECT_NAME}_test PRIVATE 
     ${PROJECT_SOURCE_DIR}/test/model
     ${PROJECT_SOURCE_DIR}/test/controller
-    ${PROJECT_SOURCE_DIR}/test/view
+    ${PROJECT_SOURCE_DIR}/test/common
 )
 
 include(GoogleTest)
