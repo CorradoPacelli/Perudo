@@ -1,8 +1,8 @@
+#include <iostream>
+
 #include "ConsoleView.hpp"
 #include "ActionInterpreter.hpp"
 #include "IAction.hpp"
-
-#include <iostream>
 
 std::unique_ptr<IAction> ConsoleView::waitForAction() {
     while (true) {
@@ -19,6 +19,7 @@ std::unique_ptr<IAction> ConsoleView::waitForAction() {
 }
 
 void ConsoleView::waitForContinue() {
+    //TODO: delete this function :(
     std::string dummy;
     std::getline(std::cin, dummy);
 }

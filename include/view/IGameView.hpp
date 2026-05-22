@@ -17,6 +17,7 @@ public:
 
     /**
      * @brief Waits for the user to just press Enter (no action parsed).
+     * TODO: remove this function completely
      */
     virtual void waitForContinue() = 0;
 

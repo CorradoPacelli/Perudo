@@ -8,28 +8,31 @@ set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE SOURCES 
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "src/**/*.cpp"
     "src/**/*.hpp"
 )
 
-list(FILTER SOURCES EXCLUDE REGEX "main\\.cpp$")
+list(FILTER SOURCES EXCLUDE REGEX "main\\.cpp$|client_main\\.cpp$")
 
 add_library(PerudoCore ${SOURCES})
 
 target_include_directories(PerudoCore PUBLIC 
     ${PROJECT_INCLUDE_DIR}
+    ${PROJECT_INCLUDE_DIR}/common
     ${PROJECT_INCLUDE_DIR}/model
     ${PROJECT_INCLUDE_DIR}/model/actions
     ${PROJECT_INCLUDE_DIR}/model/states
     ${PROJECT_INCLUDE_DIR}/model/strategies
     ${PROJECT_INCLUDE_DIR}/controller
     ${PROJECT_INCLUDE_DIR}/view
-    ${PROJECT_INCLUDE_DIR}/common
 )
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE PerudoCore)
+
+add_executable(${PROJECT_NAME}Client src/client_main.cpp)
+target_link_libraries(${PROJECT_NAME}Client PRIVATE PerudoCore)
 
 if(MSVC)
     target_compile_options(PerudoCore PRIVATE /W4 )
@@ -48,6 +51,11 @@ FetchContent_MakeAvailable(asio)
 target_include_directories(PerudoCore PUBLIC ${asio_SOURCE_DIR}/asio/include)
 target_compile_definitions(PerudoCore PUBLIC ASIO_STANDALONE)
 
+# ASIO requires the Windows Sockets API libraries on Windows
+if(WIN32)
+    target_link_libraries(PerudoCore PUBLIC ws2_32 wsock32)
+endif()
+
 # Google Test setup
 FetchContent_Declare(
   googletest
@@ -59,8 +67,9 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-file(GLOB_RECURSE TEST_SOURCES 
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
     "test/**/*.cpp"
+    "test/**/*.hpp"
 )
 
 add_executable(${PROJECT_NAME}_test ${TEST_SOURCES})
