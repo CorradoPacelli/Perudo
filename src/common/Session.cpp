@@ -24,6 +24,10 @@ void Session::send(const std::string& message) {
     });
 }
 
+int Session::getPlayerId() const { 
+    return player_id_; 
+}
+
 void Session::doRead() {
     auto self(shared_from_this());
     

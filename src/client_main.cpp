@@ -29,6 +29,19 @@ int main(int argc, char* argv[]) {
         std::cout << "  Type 'quit' to exit.\n";
         std::cout << "========================================\n\n";
 
+        // The server will first ask for our name. Let's read the prompt.
+        asio::streambuf name_buffer;
+        asio::read_until(socket, name_buffer, '\n');
+        std::istream name_is(&name_buffer);
+        std::string prompt;
+        std::getline(name_is, prompt);
+        std::cout << prompt << std::endl;
+
+        // Send our name to the server
+        std::string my_name;
+        std::getline(std::cin, my_name);
+        asio::write(socket, asio::buffer(my_name + "\n"));
+
         // 2. Start a background thread to continuously read messages from the server
         std::thread read_thread([&socket]() {
             try {

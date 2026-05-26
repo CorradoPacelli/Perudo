@@ -18,7 +18,8 @@ public:
 
     // Mocking the displayMessage to capture output instead of printing it to console
     virtual ~MockGameView() = default;
-    void displayMessage(const std::string& msg) override;
+    void displayBroadcastMessage(const std::string& msg) override;
+    void displayMessageToPlayer(int playerId, const std::string& message);
     void waitForContinue() override;
     std::unique_ptr<IAction> waitForAction() override;
 };

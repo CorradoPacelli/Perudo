@@ -22,7 +22,12 @@ public:
     virtual void waitForContinue() = 0;
 
     /**
-     * @brief Displays a message to the player/user.
+     * @brief Displays a message to all players.
      */
-    virtual void displayMessage(const std::string& message) = 0;
+    virtual void displayBroadcastMessage(const std::string& message) = 0;
+
+    /**
+     * @brief Displays a private message to a specific player.
+     */
+    virtual void displayMessageToPlayer(int playerId, const std::string& message) = 0;
 };

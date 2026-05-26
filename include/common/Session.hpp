@@ -22,6 +22,8 @@ public:
     // Safely queues a message to be sent to this player
     void send(const std::string& message);
 
+    int getPlayerId() const;
+
 private:
     void doRead();
     // TODO: for now doWrite can only handle broadcast messages

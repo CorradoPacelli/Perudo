@@ -4,7 +4,8 @@
 #include "ActionInterpreter.hpp"
 #include "IAction.hpp"
 
-NetworkView::NetworkView(short port) : server_(port, message_queue_) {
+NetworkView::NetworkView(asio::io_context& io_context, std::vector<asio::ip::tcp::socket> sockets) 
+    : server_(io_context, std::move(sockets), message_queue_) {
     server_.start();
 }
 
@@ -19,7 +20,7 @@ std::unique_ptr<IAction> NetworkView::waitForAction() {
             return action;
         }
         
-        displayMessage("Command was not recognized. Try again :)");
+        displayBroadcastMessage("Command was not recognized. Try again :)");
     }
 }
 
@@ -29,8 +30,13 @@ void NetworkView::waitForContinue() {
     std::getline(std::cin, dummy);
 }
 
-void NetworkView::displayMessage(const std::string& message) {
+void NetworkView::displayBroadcastMessage(const std::string& message) {
     // Display on the server console, then broadcast to all connected players!
     std::cout << "[SERVER BROADCAST] " << message << std::endl;
     server_.broadcast(message);
+}
+
+void NetworkView::displayMessageToPlayer(int playerId, const std::string& message) {
+    //std::cout << "[SERVER -> Player " << playerId << "] " << message << std::endl;
+    server_.sendToPlayer(playerId, message);
 }

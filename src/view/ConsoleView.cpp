@@ -14,7 +14,7 @@ std::unique_ptr<IAction> ConsoleView::waitForAction() {
             return action;
         }
         
-        displayMessage("Command was not recognized. Try again :)");
+        displayBroadcastMessage("Command was not recognized. Try again :)");
     }
 }
 
@@ -24,6 +24,10 @@ void ConsoleView::waitForContinue() {
     std::getline(std::cin, dummy);
 }
 
-void ConsoleView::displayMessage(const std::string& message) {
+void ConsoleView::displayBroadcastMessage(const std::string& message) {
     std::cout << message << std::endl;
+}
+
+void ConsoleView::displayMessageToPlayer(int playerId, const std::string& message) {
+    displayBroadcastMessage(message);
 }

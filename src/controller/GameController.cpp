@@ -26,10 +26,10 @@ void GameController::run() {
             model.render(view);
         } catch (const std::invalid_argument& e) {
             // Recoverable error: inform the user and ask for action again
-            view.displayMessage(std::string("\n[!] Invalid Action: ") + e.what() + "\nPlease try again.");
+            view.displayBroadcastMessage(std::string("\n[!] Invalid Action: ") + e.what() + "\nPlease try again.");
         } catch (const std::exception& e) {
             // Unrecoverable error: log the error and stop the process
-            view.displayMessage(std::string("\n[!] Fatal Error: ") + e.what() + "\nQuitting the game.");
+            view.displayBroadcastMessage(std::string("\n[!] Fatal Error: ") + e.what() + "\nQuitting the game.");
             model.stopGame();
         }
     }

@@ -13,5 +13,6 @@ public:
 
     std::unique_ptr<IAction> waitForAction() override;
     void waitForContinue() override;
-    void displayMessage(const std::string& message) override;
+    void displayBroadcastMessage(const std::string& message) override;
+    void displayMessageToPlayer(int playerId, const std::string& message) override;
 };

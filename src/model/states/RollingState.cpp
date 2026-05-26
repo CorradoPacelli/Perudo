@@ -17,5 +17,5 @@ void RollingState::step(GameModel& context) {
 }
 
 void RollingState::render(const GameModel& context, IGameView& view) const{
-    view.displayMessage("\n--- ROLLING DICE FOR ALL PLAYERS ---");
+    view.displayBroadcastMessage("\n--- ROLLING DICE FOR ALL PLAYERS ---");
 }

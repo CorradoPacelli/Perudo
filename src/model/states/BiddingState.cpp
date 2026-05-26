@@ -66,5 +66,5 @@ void BiddingState::render(const GameModel& context, IGameView& view) const {
         msg += "You are the first player to bid!";
     }
     
-    view.displayMessage(msg);
+    view.displayBroadcastMessage(msg);
 }

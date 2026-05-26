@@ -1,8 +1,12 @@
 #include "MockGameView.hpp"
 #include "ExitAction.hpp"
 
-void MockGameView::displayMessage(const std::string& msg) {
+void MockGameView::displayBroadcastMessage(const std::string& msg) {
     messages.push_back(msg);
+}
+
+void MockGameView::displayMessageToPlayer(int playerId, const std::string& message){
+    displayBroadcastMessage(message);
 }
 
 std::unique_ptr<IAction> MockGameView::waitForAction() {

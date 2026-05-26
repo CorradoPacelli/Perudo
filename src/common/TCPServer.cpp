@@ -1,13 +1,18 @@
 #include "TCPServer.hpp"
 #include "Session.hpp"
 
-TCPServer::TCPServer(short port, ThreadSafeQueue<PlayerMessage>& queue)
-    : io_context_(),
-      acceptor_(io_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
-      queue_(queue) {
-    
-    // Start accepting the first connection immediately
-    doAccept();
+TCPServer::TCPServer(asio::io_context& io_context, std::vector<asio::ip::tcp::socket> sockets, ThreadSafeQueue<PlayerMessage>& queue)
+    : io_context_(io_context), queue_(queue) 
+{
+    // We already accepted the clients in main.cpp, so we just wrap them in Sessions!
+    for (auto& socket : sockets) {
+        int playerId = next_player_id_++;
+        auto session = std::make_shared<Session>(std::move(socket), playerId, queue_, *this);
+        sessions_[playerId] = session;
+        
+        // Start the async read loop for this connected client
+        session->start(); 
+    }
 }
 
 TCPServer::~TCPServer() {
@@ -33,29 +38,25 @@ void TCPServer::stop() {
 void TCPServer::broadcast(const std::string& message) {
     // Use post to safely execute this on the background network thread
     asio::post(io_context_, [this, message]() {
-        for (auto& session : sessions_) {
+        for (auto& [id, session] : sessions_) {
             session->send(message);
         }
     });
 }
 
+void TCPServer::sendToPlayer(int playerId, const std::string& message) {
+    asio::post(io_context_, [this, playerId, message]() {
+        auto it = sessions_.find(playerId);
+        if (it != sessions_.end()) {
+            it->second->send(message);
+        }
+    });
+}
+
 void TCPServer::addSession(std::shared_ptr<Session> session) {
-    sessions_.insert(session);
+    sessions_[session->getPlayerId()] = session;
 }
 
 void TCPServer::removeSession(std::shared_ptr<Session> session) {
-    sessions_.erase(session);
-}
-
-void TCPServer::doAccept() {
-    acceptor_.async_accept(
-        [this](std::error_code ec, asio::ip::tcp::socket socket) {
-            if (!ec) {
-                int new_id = next_player_id_++;
-                std::make_shared<Session>(std::move(socket), new_id, queue_, *this)->start();
-            }
-            
-            // Accept the next client
-            doAccept();
-        });
+    sessions_.erase(session->getPlayerId());
 }

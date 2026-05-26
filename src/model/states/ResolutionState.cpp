@@ -71,7 +71,7 @@ void ResolutionState::render(const GameModel& context, IGameView& view) const {
     if (!resolvedBid) {
         // This should not happen if onEnter was called correctly.
         msg += "Error: No bid was resolved.";
-        view.displayMessage(msg);
+        view.displayBroadcastMessage(msg);
         return;
     }
 
@@ -109,7 +109,7 @@ void ResolutionState::render(const GameModel& context, IGameView& view) const {
         }
     }
 
-    view.displayMessage(msg);
+    view.displayBroadcastMessage(msg);
 }
 
 int ResolutionState::countDiceOfFace(const GameModel& context, short int face) const {
