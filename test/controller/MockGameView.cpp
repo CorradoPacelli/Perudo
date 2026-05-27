@@ -5,8 +5,8 @@ void MockGameView::displayBroadcastMessage(const std::string& msg) {
     messages.push_back(msg);
 }
 
-void MockGameView::displayMessageToPlayer(int playerId, const std::string& message){
-    displayBroadcastMessage(message);
+void MockGameView::displayMessageToPlayer(const PlayerMessage& pMessage){
+    messages.push_back("[Private to " + std::to_string(pMessage.playerId) + "] " + pMessage.message);
 }
 
 std::unique_ptr<IAction> MockGameView::waitForAction() {
@@ -24,7 +24,7 @@ std::unique_ptr<IAction> MockGameView::waitForAction() {
 
     // By immediately returning ExitAction, we ensure the game model will eventually 
     // trigger stopGame(), fulfilling the GameController's loop termination condition.
-    return std::make_unique<ExitAction>();
+    return std::make_unique<ExitAction>(0);
 }
 
 void MockGameView::waitForContinue() {

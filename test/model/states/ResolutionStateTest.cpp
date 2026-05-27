@@ -24,7 +24,7 @@ TEST_F(ResolutionStateTest, HandleActionIsCorretlyDisabled) {
     ResolutionState state(ActionType::DUDO);
     
     EXPECT_FALSE(state.requiresAction());
-    EXPECT_THROW(state.handleAction(model, DudoAction()), std::logic_error);
+    EXPECT_THROW(state.handleAction(model, DudoAction(0)), std::logic_error);
 }
 
 

@@ -2,10 +2,11 @@
 
 #include <memory>
 #include <string>
+#include "IAction.hpp"
 
-class IAction;
+struct PlayerMessage;
 
 class ActionInterpreter {
 public:
-    static std::unique_ptr<IAction> interpret(const std::string& rawInput);
+    static std::unique_ptr<IAction> interpret(const PlayerMessage& playerMessage);
 };

@@ -4,5 +4,5 @@
 
 struct PlayerMessage {
     int playerId;
-    std::string command;
+    std::string message;
 };

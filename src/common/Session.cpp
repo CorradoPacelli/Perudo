@@ -4,7 +4,7 @@
 #include <istream>
 
 Session::Session(asio::ip::tcp::socket socket, int playerId, ThreadSafeQueue<PlayerMessage>& queue, TCPServer& server)
-    : socket_(std::move(socket)), player_id_(playerId), queue_(queue), server_(server) {}
+    : socket_(std::move(socket)), player_id_(playerId), commands_(queue), server_(server) {}
 
 void Session::start() {
     // Tell the server we have connected
@@ -16,8 +16,8 @@ void Session::send(const std::string& message) {
     // Post the write command to the io_context to guarantee thread safety
     auto self(shared_from_this());
     asio::post(socket_.get_executor(), [this, self, message]() {
-        bool write_in_progress = !write_msgs_.empty();
-        write_msgs_.push_back(message + "\n");
+        bool write_in_progress = !messages_.empty();
+        messages_.push_back(message + "\n");
         if (!write_in_progress) {
             doWrite();
         }
@@ -48,7 +48,7 @@ void Session::doRead() {
 
                 // The async thread pushes the message directly to the thread-safe queue.
                 if (!message.empty()) {
-                    queue_.push(PlayerMessage{player_id_, message});
+                    commands_.push(PlayerMessage{player_id_, message});
                 }
 
                 // Listen again for the next message from this client.
@@ -62,11 +62,11 @@ void Session::doRead() {
 
 void Session::doWrite() {
     auto self(shared_from_this());
-    asio::async_write(socket_, asio::buffer(write_msgs_.front()),
+    asio::async_write(socket_, asio::buffer(messages_.front()),
         [this, self](std::error_code ec, std::size_t /*length*/) {
             if (!ec) {
-                write_msgs_.pop_front();
-                if (!write_msgs_.empty()) {
+                messages_.pop_front();
+                if (!messages_.empty()) {
                     doWrite();
                 }
             } else {

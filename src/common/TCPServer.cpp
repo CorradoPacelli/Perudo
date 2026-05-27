@@ -1,14 +1,14 @@
 #include "TCPServer.hpp"
 #include "Session.hpp"
+#include <algorithm>
 
 TCPServer::TCPServer(asio::io_context& io_context, std::vector<asio::ip::tcp::socket> sockets, ThreadSafeQueue<PlayerMessage>& queue)
-    : io_context_(io_context), queue_(queue) 
+    : io_context_(io_context), commands_queue_(queue) 
 {
     // We already accepted the clients in main.cpp, so we just wrap them in Sessions!
     for (auto& socket : sockets) {
         int playerId = next_player_id_++;
-        auto session = std::make_shared<Session>(std::move(socket), playerId, queue_, *this);
-        sessions_[playerId] = session;
+        auto session = std::make_shared<Session>(std::move(socket), playerId, commands_queue_, *this);
         
         // Start the async read loop for this connected client
         session->start(); 
@@ -38,25 +38,31 @@ void TCPServer::stop() {
 void TCPServer::broadcast(const std::string& message) {
     // Use post to safely execute this on the background network thread
     asio::post(io_context_, [this, message]() {
-        for (auto& [id, session] : sessions_) {
+        for (auto& session : sessions_) {
             session->send(message);
         }
     });
 }
 
-void TCPServer::sendToPlayer(int playerId, const std::string& message) {
-    asio::post(io_context_, [this, playerId, message]() {
-        auto it = sessions_.find(playerId);
+void TCPServer::sendToPlayer(const PlayerMessage& pMessage) {
+    asio::post(io_context_, [this, pMessage]() {
+        // Linear search: very fast for a small number of players!
+        auto it = std::find_if(sessions_.begin(), sessions_.end(),
+            [&](const std::shared_ptr<Session>& s) {
+                return s->getPlayerId() == pMessage.playerId;
+            });
         if (it != sessions_.end()) {
-            it->second->send(message);
+            (*it)->send(pMessage.message);
         }
     });
 }
 
 void TCPServer::addSession(std::shared_ptr<Session> session) {
-    sessions_[session->getPlayerId()] = session;
+    if (std::find(sessions_.begin(), sessions_.end(), session) == sessions_.end()) {
+        sessions_.push_back(session);
+    }
 }
 
 void TCPServer::removeSession(std::shared_ptr<Session> session) {
-    sessions_.erase(session->getPlayerId());
+    sessions_.erase(std::remove(sessions_.begin(), sessions_.end(), session), sessions_.end());
 }

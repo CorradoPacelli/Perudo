@@ -44,13 +44,13 @@ TEST_F(EndGameStateTest, HandleActionTransitToNewGame) {
     EndGameState endState;
 
     EXPECT_TRUE(endState.requiresAction());
-    EXPECT_NO_THROW(endState.handleAction(model, ResetAction()));
+    EXPECT_NO_THROW(endState.handleAction(model, ResetAction(0)));
     EXPECT_NE(dynamic_cast<RollingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
 }
 
 TEST_F(EndGameStateTest, HandleActionStopGameWithMoreThenOnePlayerAlive) {
     EndGameState endState;
 
-    EXPECT_NO_THROW(endState.handleAction(model, ExitAction()));
+    EXPECT_NO_THROW(endState.handleAction(model, ExitAction(0)));
     EXPECT_TRUE(model.isGameOver());
 }

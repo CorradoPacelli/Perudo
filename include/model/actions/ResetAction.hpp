@@ -4,5 +4,5 @@
 
 class ResetAction : public IAction {
 public:
-    ResetAction() : IAction(ActionType::RESET) {};
+    ResetAction(int playerId) : IAction(ActionType::RESET, playerId) {};
 };

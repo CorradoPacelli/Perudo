@@ -24,7 +24,7 @@ TEST_F(RollingStateTest, HandleActionIsCorretlyDisabled) {
     RollingState state;
 
     EXPECT_FALSE(state.requiresAction());
-    EXPECT_THROW(state.handleAction(model, DudoAction()), std::logic_error);
+    EXPECT_THROW(state.handleAction(model, DudoAction(0)), std::logic_error);
 }
 
 TEST_F(RollingStateTest, OnEnterRollsDiceAndClearsHistory) {

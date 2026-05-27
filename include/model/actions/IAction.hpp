@@ -4,7 +4,8 @@ enum class ActionType { BID, DUDO, EXACTLY, EXIT, RESET };
 
 class IAction {
 protected:
-    ActionType type;
+    ActionType type_;
+    int playerId_;
 
 public:
     virtual ~IAction() = default;
@@ -13,6 +14,7 @@ public:
     IAction(IAction&&) noexcept = default;
     IAction& operator=(IAction&&) noexcept = default;
 
-    IAction(ActionType type) : type(type) {};
-    virtual ActionType getType() const { return type; };
+    IAction(ActionType type, int playerId) : type_(type), playerId_(playerId) {};
+    virtual ActionType getType() const { return type_; };
+    virtual int getPlayerId() const { return playerId_; };
 };

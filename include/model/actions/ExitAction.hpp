@@ -4,5 +4,5 @@
 
 class ExitAction : public IAction {
 public:
-    ExitAction() : IAction(ActionType::EXIT) {};
+    ExitAction(int playerId) : IAction(ActionType::EXIT, playerId) {};
 };

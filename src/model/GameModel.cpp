@@ -1,6 +1,7 @@
 #include "GameModel.hpp"
 #include "RollingState.hpp"
 #include "IGameState.hpp"
+#include "IAction.hpp"
 
 GameModel::GameModel() = default;
 GameModel::~GameModel() = default;
@@ -106,6 +107,11 @@ bool GameModel::requiresAction() const {
 }
 
 void GameModel::handleAction(const IAction& action) {
+    // This is the authoritative check. The Model enforces its own rules.
+    if (action.getPlayerId() != this->currentPlayerIndex) {
+        throw std::invalid_argument("It is not your turn to act.");
+    }
+
     if (currentState) {
         currentState->handleAction(*this, action);
     }

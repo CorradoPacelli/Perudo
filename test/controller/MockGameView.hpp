@@ -8,6 +8,7 @@
 
 #include "IGameView.hpp"
 #include "IAction.hpp"
+#include "PlayerMessage.hpp"
 
 class MockGameView : public IGameView {
 public:
@@ -19,7 +20,7 @@ public:
     // Mocking the displayMessage to capture output instead of printing it to console
     virtual ~MockGameView() = default;
     void displayBroadcastMessage(const std::string& msg) override;
-    void displayMessageToPlayer(int playerId, const std::string& message);
+    void displayMessageToPlayer(const PlayerMessage& pMessage);
     void waitForContinue() override;
     std::unique_ptr<IAction> waitForAction() override;
 };

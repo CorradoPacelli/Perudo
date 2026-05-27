@@ -31,9 +31,10 @@ private:
 
     asio::ip::tcp::socket socket_;
     int player_id_;
-    ThreadSafeQueue<PlayerMessage>& queue_;
+    // commands is ment for input
+    ThreadSafeQueue<PlayerMessage>& commands_;
+    // messages is ment for output
+    std::deque<std::string> messages_;
     TCPServer& server_;
     asio::streambuf buffer_;
-    // TODO: in the future write_msgs_ will contains PLayersMessage so we can write to a single player
-    std::deque<std::string> write_msgs_;
 };

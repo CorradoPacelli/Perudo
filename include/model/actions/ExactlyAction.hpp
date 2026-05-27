@@ -4,5 +4,5 @@
 
 class ExactlyAction : public IAction {
 public:
-    ExactlyAction() : IAction(ActionType::EXACTLY) {};
+    ExactlyAction(int playerId) : IAction(ActionType::EXACTLY, playerId) {};
 };

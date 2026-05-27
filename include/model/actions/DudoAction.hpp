@@ -4,5 +4,5 @@
 
 class DudoAction : public IAction {
 public:
-    DudoAction() : IAction(ActionType::DUDO) {};
+    DudoAction(int playerId) : IAction(ActionType::DUDO, playerId) {};
 };

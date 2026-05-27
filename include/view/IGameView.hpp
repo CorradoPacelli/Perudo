@@ -2,8 +2,9 @@
 
 #include <string>
 #include <memory>
+#include "IAction.hpp"
 
-class IAction;
+class PlayerMessage;
 
 class IGameView {
 public:
@@ -29,5 +30,5 @@ public:
     /**
      * @brief Displays a private message to a specific player.
      */
-    virtual void displayMessageToPlayer(int playerId, const std::string& message) = 0;
+    virtual void displayMessageToPlayer(const PlayerMessage& pMessage) = 0;
 };

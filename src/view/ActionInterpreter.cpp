@@ -11,30 +11,35 @@
 #include "BidAction.hpp"
 #include "ExitAction.hpp"
 #include "ResetAction.hpp"
+#include "PlayerMessage.hpp"
 
-std::unique_ptr<IAction> ActionInterpreter::interpret(const std::string& rawInput) {
-    std::string input = rawInput;
-
+std::unique_ptr<IAction> ActionInterpreter::interpret(const PlayerMessage& playerMessage) {
+    std::string rawInput = playerMessage.message;
     // Safely cast tolower to avoid ambiguity
-    std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c){ return std::tolower(c); });
+    std::transform(rawInput.begin(), 
+                rawInput.end(), 
+                rawInput.begin(), 
+                [](unsigned char c){ 
+                    return std::tolower(c); 
+                });
     
-    std::stringstream ss(input);
+    std::stringstream ss(rawInput);
     std::string command;
     ss >> command;
 
     if (command == "dudo") {
-        return std::make_unique<DudoAction>();
+        return std::make_unique<DudoAction>(playerMessage.playerId);
     }
 
     if (command == "exactly") {
-        return std::make_unique<ExactlyAction>();
+        return std::make_unique<ExactlyAction>(playerMessage.playerId);
     }
 
     if (command == "bid") {
         int qty, val;
         if (ss >> qty >> val) {
             try {
-                return std::make_unique<BidAction>(Bid{qty, val});
+                return std::make_unique<BidAction>(Bid{qty, val}, playerMessage.playerId);
             } catch (const std::invalid_argument& e) {
                 return nullptr;
             }
@@ -42,11 +47,11 @@ std::unique_ptr<IAction> ActionInterpreter::interpret(const std::string& rawInpu
     }
 
     if (command == "exit" || command == "quit" || command == "q") {
-        return std::make_unique<ExitAction>();
+        return std::make_unique<ExitAction>(playerMessage.playerId);
     }
 
     if (command == "reset") {
-        return std::make_unique<ResetAction>();
+        return std::make_unique<ResetAction>(playerMessage.playerId);
     }
 
     return nullptr;

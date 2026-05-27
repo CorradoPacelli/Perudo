@@ -58,7 +58,7 @@ TEST_F(TCPServerTest, ReceivesMessageFromClient) {
     // Wait for the server to process it and pop it from the queue
     PlayerMessage received = queue.waitAndPop();
     EXPECT_EQ(received.playerId, 0); // The first connected client should be ID 0
-    EXPECT_EQ(received.command, "Hello Server!");
+    EXPECT_EQ(received.message, "Hello Server!");
 }
 
 TEST_F(TCPServerTest, HandlesWindowsCarriageReturn) {
@@ -69,7 +69,7 @@ TEST_F(TCPServerTest, HandlesWindowsCarriageReturn) {
     asio::write(*clients[0], asio::buffer(message));
 
     PlayerMessage received = queue.waitAndPop();
-    EXPECT_EQ(received.command, "Windows Message"); // The \r should be stripped out!
+    EXPECT_EQ(received.message, "Windows Message"); // The \r should be stripped out!
 }
 
 TEST_F(TCPServerTest, BroadcastsMessageToClients) {
@@ -101,7 +101,7 @@ TEST_F(TCPServerTest, SendsMessageToSpecificPlayer) {
     StartServerWithClients(2);
 
     // Send a private message only to the second client (Player ID 1)
-    server->sendToPlayer(1, "Secret message for player 1!");
+    server->sendToPlayer(PlayerMessage(1, "Secret message for player 1!"));
 
     // Read the response synchronously on client 2
     asio::streambuf buffer;

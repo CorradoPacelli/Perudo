@@ -37,7 +37,7 @@ TEST_F(BiddingStateTest, OnEnterDoesNotThrow) {
 
 TEST_F(BiddingStateTest, HandleDudoActionTransitionsToResolutionState) {
     BiddingState state;
-    DudoAction dudo;
+    DudoAction dudo(0);
 
     // Can not say dudo as first action
     EXPECT_THROW(state.handleAction(model, dudo), std::invalid_argument); 
@@ -50,7 +50,7 @@ TEST_F(BiddingStateTest, HandleDudoActionTransitionsToResolutionState) {
 
 TEST_F(BiddingStateTest, HandleExactlyActionTransitionsToResolutionState) {
     BiddingState state;
-    ExactlyAction exactly;
+    ExactlyAction exactly(0);
 
     // Can not say exactly as first action
     EXPECT_THROW(state.handleAction(model, exactly), std::invalid_argument); 
@@ -63,7 +63,7 @@ TEST_F(BiddingStateTest, HandleExactlyActionTransitionsToResolutionState) {
 
 TEST_F(BiddingStateTest, HandleFirstValidBidAction) {
     BiddingState state;
-    BidAction firstBid(Bid(3, 4));
+    BidAction firstBid(Bid(3, 4), 0);
 
     model.startGame();
     EXPECT_NE(dynamic_cast<RollingState*>(GameModelTestAccessor::getCurrentState(model)), nullptr);
@@ -93,7 +93,7 @@ TEST_F(BiddingStateTest, HandleSubsequentValidBidAction) {
     model.getPlayers()[2].addBid(Bid(2, 2));
     ASSERT_EQ(model.getCurrentPlayer().getName(), "Saitama");
     
-    BidAction higherBid(Bid(3, 2));
+    BidAction higherBid(Bid(3, 2), 0);
     state.handleAction(model, higherBid);
 
     // After Saitama bids, the current player is Genos, and the previous is Saitama
@@ -115,11 +115,11 @@ TEST_F(BiddingStateTest, HandleInvalidBidActionThrows) {
     model.getPlayers()[2].addBid(Bid(3, 3));
     
     // Saitama tries to make a lower bid
-    BidAction lowerBid(Bid(2, 6));
+    BidAction lowerBid(Bid(2, 6), 0);
     EXPECT_THROW(state.handleAction(model, lowerBid), std::invalid_argument);
 
     // Saitama tries to make an equal bid
-    BidAction equalBid(Bid(3, 3));
+    BidAction equalBid(Bid(3, 3), 0);
     EXPECT_THROW(state.handleAction(model, equalBid), std::invalid_argument);
 
     EXPECT_EQ(model.getCurrentPlayer().getName(), "Saitama");
@@ -129,7 +129,7 @@ TEST_F(BiddingStateTest, HandleInvalidBidActionThrows) {
 
 TEST_F(BiddingStateTest, HandleExitActionStopsGameAndTransitions) {
     BiddingState state;
-    ExitAction exit;
+    ExitAction exit(0);
 
     // TODO: fix this, we throw because there are more than 1 player plaing, but this should be ok
     EXPECT_THROW(state.handleAction(model, exit), std::logic_error);

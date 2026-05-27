@@ -8,9 +8,7 @@ private:
     Bid bid;
 
 public:
-    BidAction(Bid b) : IAction(ActionType::BID), bid(b) {}
+    BidAction(Bid b, int playerId) : IAction(ActionType::BID, playerId), bid(b) {}
 
-    const Bid getBid() const{
-        return bid;
-    }
+    const Bid getBid() const{ return bid; }
 };
