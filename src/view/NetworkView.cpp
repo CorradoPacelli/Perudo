@@ -23,12 +23,6 @@ std::unique_ptr<IAction> NetworkView::waitForAction() {
     }
 }
 
-void NetworkView::waitForContinue() {
-    //TODO: delete this function :(
-    std::string dummy;
-    std::getline(std::cin, dummy);
-}
-
 void NetworkView::displayBroadcastMessage(const std::string& message) {
     // Display on the server console, then broadcast to all connected players!
     std::cout << "[SERVER BROADCAST] " << message << std::endl;

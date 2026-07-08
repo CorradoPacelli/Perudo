@@ -21,12 +21,6 @@ std::unique_ptr<IAction> ConsoleView::waitForAction() {
     }
 }
 
-void ConsoleView::waitForContinue() {
-    //TODO: delete this function :(
-    std::string dummy;
-    std::getline(std::cin, dummy);
-}
-
 void ConsoleView::displayBroadcastMessage(const std::string& message) {
     std::cout << message << std::endl;
 }

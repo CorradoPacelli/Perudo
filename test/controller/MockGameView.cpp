@@ -26,7 +26,3 @@ std::unique_ptr<IAction> MockGameView::waitForAction() {
     // trigger stopGame(), fulfilling the GameController's loop termination condition.
     return std::make_unique<ExitAction>(0);
 }
-
-void MockGameView::waitForContinue() {
-    return;
-}
