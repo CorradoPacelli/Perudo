@@ -30,6 +30,6 @@ void NetworkView::displayBroadcastMessage(const std::string& message) {
 }
 
 void NetworkView::displayMessageToPlayer(const PlayerMessage& pMessage) {
-    //std::cout << "[SERVER -> Player " << playerId << "] " << message << std::endl;
+    std::cout << "[SERVER -> Player " << pMessage.playerId << "] " << pMessage.message << std::endl;
     server_.sendToPlayer(pMessage);
 }

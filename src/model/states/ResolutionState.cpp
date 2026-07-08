@@ -84,7 +84,7 @@ void ResolutionState::render(const GameModel& context, IGameView& view) const {
 
     msg += "All dice are revealed:\n";
     for (const auto& player : context.getPlayers()) {
-        if (!player.isAlive()) continue;
+        if (!player.isAlive() || player.getDiceCount() == 0) continue;
         msg += player.getName() + ": ";
         for (const auto& die : player.getHand()) {
             msg += std::to_string(die.getFace()) + " ";

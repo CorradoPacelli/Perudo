@@ -45,6 +45,6 @@ void EndGameState::render(const GameModel& context, IGameView& view) const {
             break;
         }
     }
-    msg += "Type 'reset' to start a new game; type 'exit' to quit";
+    msg += "Type 'reset' to start a new game, or 'exit' to quit.";
     view.displayBroadcastMessage(msg);
 }

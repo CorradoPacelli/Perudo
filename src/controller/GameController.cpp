@@ -20,7 +20,6 @@ void GameController::run() {
                 auto action = view.waitForAction();
                 model.handleAction(*action);
             } else {
-                //view.waitForContinue(); //TODO: I don't know if I want this wait for continue or not 
                 model.step();
             }
             model.render(view);

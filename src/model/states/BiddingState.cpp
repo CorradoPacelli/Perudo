@@ -6,6 +6,7 @@
 #include "BidAction.hpp"
 #include "GameModel.hpp"
 #include "IGameView.hpp"
+#include "PlayerMessage.hpp"
 #include "Die.hpp"
 
 void BiddingState::onEnter(GameModel& context) {
@@ -48,23 +49,33 @@ void BiddingState::handleAction(GameModel& context, const IAction& action) {
 }
 
 void BiddingState::render(const GameModel& context, IGameView& view) const {
-    std::string msg = "\n--- DECLARATION PHASE ---\n";
-    const Player& current = context.getCurrentPlayer();
-    msg += "Player: " + current.getName() + "\n";
-    
-    msg += "Hand: ";
-    for (const auto& die : current.getHand()) {
-        msg += std::to_string(die.getFace()) + " ";
-    }
-    msg += "\n";
-    
+    const Player& currentPlayer = context.getCurrentPlayer();
     auto lastBid = context.getLastBid();
-    if (lastBid) {
-        msg += "Last bid: 'There are at least " + std::to_string(lastBid->getQuantity()) + " dice with face " + std::to_string(lastBid->getFace()) + "'\n";
-        msg += "Made by: " + context.getPreviousAlivePlayer().getName();
-    } else {
-        msg += "You are the first player to bid!";
+
+    for (const auto& player : context.getPlayers()) {
+        if (!player.isAlive()) continue;
+
+        int playerId = &player - &context.getPlayers()[0];
+        std::string msg = "\n--- DECLARATION PHASE ---\n";
+
+        if (player == currentPlayer) {
+            msg += "It's your turn, " + player.getName() + "!\n";
+            msg += "Your hand: ";
+            for (const auto& die : player.getHand()) {
+                msg += std::to_string(die.getFace()) + " ";
+            }
+            msg += "\n";
+
+            if (lastBid) {
+                msg += "Last bid from " + context.getPreviousAlivePlayer().getName() + ": " + std::to_string(lastBid->getQuantity()) + "x " + std::to_string(lastBid->getFace()) + "\n";
+            } else {
+                msg += "You are the first player to bid!\n";
+            }
+            msg += "Enter your action (e.g., 'bid 2 3', 'dudo', 'exactly'):";
+        } else {
+            msg += "Waiting for " + currentPlayer.getName() + " to make a bid...";
+        }
+
+        view.displayMessageToPlayer({playerId, msg});
     }
-    
-    view.displayBroadcastMessage(msg);
 }
